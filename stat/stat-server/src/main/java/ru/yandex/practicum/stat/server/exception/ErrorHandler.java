@@ -1,4 +1,4 @@
-package ru.yandex.practicum.stat.service.exception;
+package ru.yandex.practicum.stat.server.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;

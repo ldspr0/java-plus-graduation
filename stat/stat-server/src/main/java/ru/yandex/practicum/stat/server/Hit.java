@@ -1,4 +1,4 @@
-package ru.yandex.practicum.stat.service;
+package ru.yandex.practicum.stat.server;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

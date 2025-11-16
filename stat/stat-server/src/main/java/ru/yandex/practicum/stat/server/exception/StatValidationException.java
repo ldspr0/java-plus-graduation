@@ -1,4 +1,4 @@
-package ru.yandex.practicum.stat.service.exception;
+package ru.yandex.practicum.stat.server.exception;
 
 public class StatValidationException extends RuntimeException {
     public StatValidationException(String message) {

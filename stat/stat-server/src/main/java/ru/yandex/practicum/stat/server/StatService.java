@@ -1,4 +1,4 @@
-package ru.yandex.practicum.stat.service;
+package ru.yandex.practicum.stat.server;
 
 import ru.yandex.practicum.stat.dto.EndpointHitCreate;
 import ru.yandex.practicum.stat.dto.ViewStats;
