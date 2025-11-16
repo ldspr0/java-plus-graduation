@@ -21,4 +21,6 @@ spring:
     password: main
 
 stat:
-  server-url: http://stats-server:9090
+  server-url: http://stat-service:9090
+
+app: explore-with-me-main-service

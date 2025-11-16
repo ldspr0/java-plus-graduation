@@ -15,18 +15,12 @@ import ru.yandex.practicum.stat.dto.ViewStats;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 @Slf4j
 public class StatClientImpl implements StatClient {
     private final RestClient client;
     @Value("${stat.server-url}")
     private String serverUrl;
-
-    public RestClient restClient() {
-        return RestClient.builder()
-                .baseUrl(serverUrl)
-                .build();
-    }
 
     public ResponseEntity<Void> createHit(EndpointHitCreate endpointHitCreate) {
         log.trace("STAT CLIENT: createHit() call with endpointHitCreate body: {}", endpointHitCreate);

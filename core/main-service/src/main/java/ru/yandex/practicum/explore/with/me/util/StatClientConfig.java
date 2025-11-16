@@ -3,6 +3,7 @@ package ru.yandex.practicum.explore.with.me.util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.client.RestClient;
 import ru.yandex.practicum.stat.client.StatClient;
 import ru.yandex.practicum.stat.client.StatClientImpl;
@@ -11,6 +12,7 @@ import ru.yandex.practicum.stat.client.StatClientImpl;
 public class StatClientConfig {
 
     @Bean
+    @Lazy
     public StatClient statClient(@Value("${stat.server-url}") String serverUrl) {
         RestClient client = RestClient.builder()
                 .baseUrl(serverUrl)
