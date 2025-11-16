@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class StatClientImpl implements StatClient {
     private final RestClient client;
-    @Value("${stat.server-url}")
+    @Value("${stats.server-url}")
     private String serverUrl;
 
     public ResponseEntity<Void> createHit(EndpointHitCreate endpointHitCreate) {
