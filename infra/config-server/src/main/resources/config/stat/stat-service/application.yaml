@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 9090
 
 spring:
   jpa:
@@ -16,9 +16,6 @@ spring:
 
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ewm
-    username: main
-    password: main
-
-stat:
-  server-url: http://stats-server:9090
+    url: jdbc:postgresql://localhost:6432/ewm_stats
+    username: stats
+    password: stats
