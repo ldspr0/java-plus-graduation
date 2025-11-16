@@ -20,7 +20,7 @@ spring:
     username: main
     password: main
 
-stat:
-  server-url: http://stat-service:9090
+stats:
+  server-url: http://stats-service:9090
 
 app: explore-with-me-main-service

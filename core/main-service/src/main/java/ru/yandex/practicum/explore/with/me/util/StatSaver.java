@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.stat.client.StatClient;
-import ru.yandex.practicum.stat.dto.EndpointHitCreate;
+import ru.yandex.practicum.stats.client.StatClient;
+import ru.yandex.practicum.stats.dto.EndpointHitCreate;
 
 import java.time.LocalDateTime;
 

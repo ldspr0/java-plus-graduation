@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.client.RestClient;
-import ru.yandex.practicum.stat.client.StatClient;
-import ru.yandex.practicum.stat.client.StatClientImpl;
+import ru.yandex.practicum.stats.client.StatClient;
+import ru.yandex.practicum.stats.client.StatClientImpl;
 
 @Configuration
 public class StatClientConfig {
