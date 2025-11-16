@@ -1,11 +1,11 @@
-package ru.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.explore.with.me.model.user.NewUserRequest;
-import ru.practicum.explore.with.me.model.user.User;
-import ru.practicum.explore.with.me.model.user.UserDto;
-import ru.practicum.explore.with.me.model.user.UserShortDto;
+import ru.yandex.practicum.explore.with.me.model.user.NewUserRequest;
+import ru.yandex.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.explore.with.me.model.user.UserDto;
+import ru.yandex.practicum.explore.with.me.model.user.UserShortDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

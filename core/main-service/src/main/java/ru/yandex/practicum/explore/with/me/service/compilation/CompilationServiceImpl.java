@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.service.compilation;
+package ru.yandex.practicum.explore.with.me.service.compilation;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,16 +7,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explore.with.me.exception.NotFoundException;
-import ru.practicum.explore.with.me.mapper.CompilationMapper;
-import ru.practicum.explore.with.me.model.compilation.Compilation;
-import ru.practicum.explore.with.me.model.compilation.CompilationCreateDto;
-import ru.practicum.explore.with.me.model.compilation.CompilationRequestDto;
-import ru.practicum.explore.with.me.model.compilation.CompilationUpdateDto;
-import ru.practicum.explore.with.me.model.event.Event;
-import ru.practicum.explore.with.me.repository.CompilationRepository;
-import ru.practicum.explore.with.me.repository.EventRepository;
-import ru.practicum.explore.with.me.util.ExistenceValidator;
+import ru.yandex.practicum.explore.with.me.exception.NotFoundException;
+import ru.yandex.practicum.explore.with.me.mapper.CompilationMapper;
+import ru.yandex.practicum.explore.with.me.model.compilation.Compilation;
+import ru.yandex.practicum.explore.with.me.model.compilation.CompilationCreateDto;
+import ru.yandex.practicum.explore.with.me.model.compilation.CompilationRequestDto;
+import ru.yandex.practicum.explore.with.me.model.compilation.CompilationUpdateDto;
+import ru.yandex.practicum.explore.with.me.model.event.Event;
+import ru.yandex.practicum.explore.with.me.repository.CompilationRepository;
+import ru.yandex.practicum.explore.with.me.repository.EventRepository;
+import ru.yandex.practicum.explore.with.me.util.ExistenceValidator;
 
 import java.util.Collections;
 import java.util.List;

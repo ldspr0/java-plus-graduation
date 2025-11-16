@@ -1,16 +1,16 @@
-package ru.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.practicum.explore.with.me.model.event.Event;
-import ru.practicum.explore.with.me.model.event.EventStatistics;
-import ru.practicum.explore.with.me.model.event.dto.EventFullDto;
-import ru.practicum.explore.with.me.model.event.dto.EventShortDto;
-import ru.practicum.explore.with.me.model.event.dto.NewEventDto;
-import ru.practicum.explore.with.me.model.event.dto.UpdateEventAdminRequestDto;
+import ru.yandex.practicum.explore.with.me.model.event.Event;
+import ru.yandex.practicum.explore.with.me.model.event.EventStatistics;
+import ru.yandex.practicum.explore.with.me.model.event.dto.EventFullDto;
+import ru.yandex.practicum.explore.with.me.model.event.dto.EventShortDto;
+import ru.yandex.practicum.explore.with.me.model.event.dto.NewEventDto;
+import ru.yandex.practicum.explore.with.me.model.event.dto.UpdateEventAdminRequestDto;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class, CommentMapper.class})
 public interface EventMapper {

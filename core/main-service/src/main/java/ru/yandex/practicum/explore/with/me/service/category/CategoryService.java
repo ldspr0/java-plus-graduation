@@ -1,7 +1,7 @@
-package ru.practicum.explore.with.me.service.category;
+package ru.yandex.practicum.explore.with.me.service.category;
 
-import ru.practicum.explore.with.me.model.category.CategoryDto;
-import ru.practicum.explore.with.me.model.category.NewCategoryDto;
+import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
+import ru.yandex.practicum.explore.with.me.model.category.NewCategoryDto;
 
 import java.util.List;
 

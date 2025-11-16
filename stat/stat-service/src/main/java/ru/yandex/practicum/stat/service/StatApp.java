@@ -1,4 +1,4 @@
-package ru.practicum.stat.service;
+package ru.yandex.practicum.stat.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

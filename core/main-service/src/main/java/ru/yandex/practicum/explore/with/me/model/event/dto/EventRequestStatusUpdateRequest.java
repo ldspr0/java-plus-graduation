@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.event.dto;
+package ru.yandex.practicum.explore.with.me.model.event.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

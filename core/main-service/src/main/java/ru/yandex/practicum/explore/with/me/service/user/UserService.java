@@ -1,8 +1,8 @@
-package ru.practicum.explore.with.me.service.user;
+package ru.yandex.practicum.explore.with.me.service.user;
 
-import ru.practicum.explore.with.me.model.user.AdminUserFindParam;
-import ru.practicum.explore.with.me.model.user.NewUserRequest;
-import ru.practicum.explore.with.me.model.user.UserDto;
+import ru.yandex.practicum.explore.with.me.model.user.AdminUserFindParam;
+import ru.yandex.practicum.explore.with.me.model.user.NewUserRequest;
+import ru.yandex.practicum.explore.with.me.model.user.UserDto;
 
 import java.util.List;
 

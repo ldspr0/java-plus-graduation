@@ -1,11 +1,11 @@
-package ru.practicum.explore.with.me.model.event.dto;
+package ru.yandex.practicum.explore.with.me.model.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.explore.with.me.model.category.CategoryDto;
-import ru.practicum.explore.with.me.model.user.UserShortDto;
+import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
+import ru.yandex.practicum.explore.with.me.model.user.UserShortDto;
 
 import java.time.LocalDateTime;
 

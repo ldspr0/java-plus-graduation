@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.user;
+package ru.yandex.practicum.explore.with.me.model.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

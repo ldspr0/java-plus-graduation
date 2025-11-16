@@ -1,8 +1,8 @@
-package ru.practicum.stat.client;
+package ru.yandex.practicum.stat.client;
 
 import org.springframework.http.ResponseEntity;
-import ru.practicum.stat.dto.EndpointHitCreate;
-import ru.practicum.stat.dto.ViewStats;
+import ru.yandex.practicum.stat.dto.EndpointHitCreate;
+import ru.yandex.practicum.stat.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.compilation;
+package ru.yandex.practicum.explore.with.me.model.compilation;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

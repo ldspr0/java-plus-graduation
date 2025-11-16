@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.controller.event;
+package ru.yandex.practicum.explore.with.me.controller.event;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.explore.with.me.model.comment.CommentDto;
-import ru.practicum.explore.with.me.model.event.EventPublicSort;
-import ru.practicum.explore.with.me.model.event.PublicEventParam;
-import ru.practicum.explore.with.me.model.event.dto.EventFullDto;
-import ru.practicum.explore.with.me.model.event.dto.EventShortDto;
-import ru.practicum.explore.with.me.service.comment.CommentService;
-import ru.practicum.explore.with.me.service.event.EventService;
-import ru.practicum.explore.with.me.util.StatSaver;
+import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
+import ru.yandex.practicum.explore.with.me.model.event.EventPublicSort;
+import ru.yandex.practicum.explore.with.me.model.event.PublicEventParam;
+import ru.yandex.practicum.explore.with.me.model.event.dto.EventFullDto;
+import ru.yandex.practicum.explore.with.me.model.event.dto.EventShortDto;
+import ru.yandex.practicum.explore.with.me.service.comment.CommentService;
+import ru.yandex.practicum.explore.with.me.service.event.EventService;
+import ru.yandex.practicum.explore.with.me.util.StatSaver;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.controller.comment;
+package ru.yandex.practicum.explore.with.me.controller.comment;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.explore.with.me.model.comment.CommentDto;
-import ru.practicum.explore.with.me.service.comment.CommentService;
+import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
+import ru.yandex.practicum.explore.with.me.service.comment.CommentService;
 
 @RestController
 @RequestMapping("/admin/comments")

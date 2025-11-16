@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.event;
+package ru.yandex.practicum.explore.with.me.model.event;
 
 
 import jakarta.persistence.CascadeType;
@@ -18,10 +18,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.explore.with.me.model.category.Category;
-import ru.practicum.explore.with.me.model.comment.Comment;
-import ru.practicum.explore.with.me.model.participation.ParticipationRequest;
-import ru.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.explore.with.me.model.category.Category;
+import ru.yandex.practicum.explore.with.me.model.comment.Comment;
+import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequest;
+import ru.yandex.practicum.explore.with.me.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

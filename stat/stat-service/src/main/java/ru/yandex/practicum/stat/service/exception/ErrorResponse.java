@@ -1,4 +1,4 @@
-package ru.practicum.stat.service.exception;
+package ru.yandex.practicum.stat.service.exception;
 
 public class ErrorResponse {
     String error;

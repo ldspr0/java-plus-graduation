@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.event;
+package ru.yandex.practicum.explore.with.me.model.event;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;

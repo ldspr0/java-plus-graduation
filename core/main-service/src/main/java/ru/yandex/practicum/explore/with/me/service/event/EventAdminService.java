@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.service.event;
+package ru.yandex.practicum.explore.with.me.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,17 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explore.with.me.exception.ConflictException;
-import ru.practicum.explore.with.me.exception.NotFoundException;
-import ru.practicum.explore.with.me.mapper.EventMapper;
-import ru.practicum.explore.with.me.model.event.AdminEventFilter;
-import ru.practicum.explore.with.me.model.event.Event;
-import ru.practicum.explore.with.me.model.event.EventState;
-import ru.practicum.explore.with.me.model.event.EventStatistics;
-import ru.practicum.explore.with.me.model.event.dto.EventFullDto;
-import ru.practicum.explore.with.me.model.event.dto.UpdateEventAdminRequestDto;
-import ru.practicum.explore.with.me.repository.CategoryRepository;
-import ru.practicum.explore.with.me.repository.EventRepository;
+import ru.yandex.practicum.explore.with.me.exception.ConflictException;
+import ru.yandex.practicum.explore.with.me.exception.NotFoundException;
+import ru.yandex.practicum.explore.with.me.mapper.EventMapper;
+import ru.yandex.practicum.explore.with.me.model.event.AdminEventFilter;
+import ru.yandex.practicum.explore.with.me.model.event.Event;
+import ru.yandex.practicum.explore.with.me.model.event.EventState;
+import ru.yandex.practicum.explore.with.me.model.event.EventStatistics;
+import ru.yandex.practicum.explore.with.me.model.event.dto.EventFullDto;
+import ru.yandex.practicum.explore.with.me.model.event.dto.UpdateEventAdminRequestDto;
+import ru.yandex.practicum.explore.with.me.repository.CategoryRepository;
+import ru.yandex.practicum.explore.with.me.repository.EventRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

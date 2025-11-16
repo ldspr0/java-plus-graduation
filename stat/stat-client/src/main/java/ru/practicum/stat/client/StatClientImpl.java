@@ -1,4 +1,4 @@
-package ru.practicum.stat.client;
+package ru.yandex.practicum.stat.client;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.practicum.stat.dto.EndpointHitCreate;
-import ru.practicum.stat.dto.ViewStats;
+import ru.yandex.practicum.stat.dto.EndpointHitCreate;
+import ru.yandex.practicum.stat.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;

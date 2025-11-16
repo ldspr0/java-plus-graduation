@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.util;
+package ru.yandex.practicum.explore.with.me.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import ru.practicum.stat.client.StatClient;
-import ru.practicum.stat.dto.EndpointHitCreate;
+import ru.yandex.practicum.stat.client.StatClient;
+import ru.yandex.practicum.stat.dto.EndpointHitCreate;
 
 import java.time.LocalDateTime;
 

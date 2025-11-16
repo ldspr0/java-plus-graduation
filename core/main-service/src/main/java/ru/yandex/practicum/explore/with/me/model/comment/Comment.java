@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.comment;
+package ru.yandex.practicum.explore.with.me.model.comment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.explore.with.me.model.event.Event;
-import ru.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.explore.with.me.model.event.Event;
+import ru.yandex.practicum.explore.with.me.model.user.User;
 
 import java.time.LocalDateTime;
 

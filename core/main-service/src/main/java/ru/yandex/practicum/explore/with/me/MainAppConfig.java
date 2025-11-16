@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me;
+package ru.yandex.practicum.explore.with.me;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

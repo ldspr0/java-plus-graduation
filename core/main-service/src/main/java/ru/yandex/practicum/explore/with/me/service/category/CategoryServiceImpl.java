@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.service.category;
+package ru.yandex.practicum.explore.with.me.service.category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,15 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explore.with.me.exception.ConflictException;
-import ru.practicum.explore.with.me.exception.NotFoundException;
-import ru.practicum.explore.with.me.mapper.CategoryMapper;
-import ru.practicum.explore.with.me.model.category.Category;
-import ru.practicum.explore.with.me.model.category.CategoryDto;
-import ru.practicum.explore.with.me.model.category.NewCategoryDto;
-import ru.practicum.explore.with.me.repository.CategoryRepository;
-import ru.practicum.explore.with.me.util.DataProvider;
-import ru.practicum.explore.with.me.util.ExistenceValidator;
+import ru.yandex.practicum.explore.with.me.exception.ConflictException;
+import ru.yandex.practicum.explore.with.me.exception.NotFoundException;
+import ru.yandex.practicum.explore.with.me.mapper.CategoryMapper;
+import ru.yandex.practicum.explore.with.me.model.category.Category;
+import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
+import ru.yandex.practicum.explore.with.me.model.category.NewCategoryDto;
+import ru.yandex.practicum.explore.with.me.repository.CategoryRepository;
+import ru.yandex.practicum.explore.with.me.util.DataProvider;
+import ru.yandex.practicum.explore.with.me.util.ExistenceValidator;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.event.dto;
+package ru.yandex.practicum.explore.with.me.model.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.AssertTrue;
@@ -6,8 +6,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.explore.with.me.model.event.Location;
-import ru.practicum.explore.with.me.model.event.StateAction;
+import ru.yandex.practicum.explore.with.me.model.event.Location;
+import ru.yandex.practicum.explore.with.me.model.event.StateAction;
 
 import java.time.LocalDateTime;
 

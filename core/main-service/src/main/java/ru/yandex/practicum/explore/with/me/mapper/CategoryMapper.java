@@ -1,10 +1,10 @@
-package ru.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.explore.with.me.model.category.Category;
-import ru.practicum.explore.with.me.model.category.CategoryDto;
-import ru.practicum.explore.with.me.model.category.NewCategoryDto;
+import ru.yandex.practicum.explore.with.me.model.category.Category;
+import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
+import ru.yandex.practicum.explore.with.me.model.category.NewCategoryDto;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {

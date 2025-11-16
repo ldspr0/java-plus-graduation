@@ -1,4 +1,4 @@
-package ru.practicum.explore.with.me.model.participation;
+package ru.yandex.practicum.explore.with.me.model.participation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -15,8 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.explore.with.me.model.event.Event;
-import ru.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.explore.with.me.model.event.Event;
+import ru.yandex.practicum.explore.with.me.model.user.User;
 
 import java.time.LocalDateTime;
 

@@ -1,16 +1,16 @@
-package ru.practicum.stat.service;
+package ru.yandex.practicum.stat.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.stat.dto.ViewStats;
+import ru.yandex.practicum.stat.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatRepository extends JpaRepository<Hit, Long> {
     @Query("""
-        SELECT new ru.practicum.stat.dto.ViewStats(h.app, h.uri, COUNT(h))
+        SELECT new ru.yandex.practicum.stat.dto.ViewStats(h.app, h.uri, COUNT(h))
         FROM Hit h
         WHERE h.created BETWEEN :start AND :end
         AND (:uris IS NULL OR h.uri IN :uris)
@@ -22,7 +22,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
                                 @Param("uris") List<String> uris);
 
     @Query("""
-        SELECT new ru.practicum.stat.dto.ViewStats(h.app, h.uri, COUNT(DISTINCT h.ip))
+        SELECT new ru.yandex.practicum.stat.dto.ViewStats(h.app, h.uri, COUNT(DISTINCT h.ip))
         FROM Hit h
         WHERE h.created BETWEEN :start AND :end
         AND (:uris IS NULL OR h.uri IN :uris)
