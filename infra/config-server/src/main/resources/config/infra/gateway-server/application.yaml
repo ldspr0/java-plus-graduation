@@ -1,0 +1,117 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      routes:
+        - id: main-service-admin-users
+          uri: lb://main-service
+          predicates:
+            - Path=/admin/users, /admin/users/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-admin-categories
+          uri: lb://main-service
+          predicates:
+            - Path=/admin/categories, /admin/categories/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-admin-compilations
+          uri: lb://main-service
+          predicates:
+            - Path=/admin/compilations, /admin/compilations/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-admin-events
+          uri: lb://main-service
+          predicates:
+            - Path=/admin/events, /admin/events/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-public-categories
+          uri: lb://main-service
+          predicates:
+            - Path=/categories, /categories/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-public-compilations
+          uri: lb://main-service
+          predicates:
+            - Path=/compilations, /compilations/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-public-events
+          uri: lb://main-service
+          predicates:
+            - Path=/events, /events/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-private-events
+          uri: lb://main-service
+          predicates:
+            - Path=/users/*/events, /users/*/events/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: main-service-private-requests
+          uri: lb://main-service
+          predicates:
+            - Path=/users/*/requests, /users/*/requests/**
+          filters:
+            - CircuitBreaker=mainServiceCircuitBreaker
+
+        - id: stats-server-hit
+          uri: lb://stats-server
+          predicates:
+            - Path=/hit
+          filters:
+            - CircuitBreaker=statsServiceCircuitBreaker
+
+        - id: stats-server-stats
+          uri: lb://stats-server
+          predicates:
+            - Path=/stats
+          filters:
+            - CircuitBreaker=statsServiceCircuitBreaker
+
+server:
+  port: 8080
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      mainServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
+      statsServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,health,info
+  endpoint:
+    gateway:
+      enabled: true
