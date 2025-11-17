@@ -1,7 +1,7 @@
 package ru.yandex.practicum.stats.server.exception;
 
 public class ErrorResponse {
-    String error;
+    private String error;
 
     public ErrorResponse(String error) {
         this.error = error;
