@@ -1,25 +1,25 @@
-package ru.yandex.practicum.explore.with.me.service.participation.request;
+package ru.yandex.practicum.request_service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.explore.with.me.exception.ConflictException;
-import ru.yandex.practicum.explore.with.me.exception.NotFoundException;
-import ru.yandex.practicum.explore.with.me.mapper.ParticipationRequestMapper;
+import ru.yandex.practicum.request_service.exception.ConflictException;
+import ru.yandex.practicum.request_service.exception.NotFoundException;
+import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.explore.with.me.model.event.Event;
-import ru.yandex.practicum.explore.with.me.model.participation.CancelParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.NewParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestDto;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestStatus;
-import ru.yandex.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.request_service.model.CancelParticipationRequest;
+import ru.yandex.practicum.request_service.model.NewParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequestDto;
+import ru.yandex.practicum.request_service.model.ParticipationRequestStatus;
+import ru.yandex.practicum.user_service.model.User;
 import ru.yandex.practicum.explore.with.me.repository.EventRepository;
-import ru.yandex.practicum.explore.with.me.repository.ParticipationRequestRepository;
-import ru.yandex.practicum.explore.with.me.repository.UserRepository;
-import ru.yandex.practicum.explore.with.me.util.DataProvider;
-import ru.yandex.practicum.explore.with.me.util.ExistenceValidator;
+import ru.yandex.practicum.request_service.repository.ParticipationRequestRepository;
+import ru.yandex.practicum.user_service.repository.UserRepository;
+import ru.yandex.practicum.request_service.util.DataProvider;
+import ru.yandex.practicum.request_service.util.ExistenceValidator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,12 +70,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         Event event = eventRepository.findById(eventId).get();
 
-        if (event.getInitiator().getId().equals(requesterId)) {
-            log.info("{}: attempt to create participationRequest by an event initiator with requesterId: {}, eventId: {}, " +
-                    "initiatorId: {}", className, requesterId, eventId, event.getInitiator().getId());
-            throw new ConflictException("Initiator can't create participation request.", "requesterId: "
-                    + requesterId + " equals to initiatorId: " + event.getInitiator().getId());
-        }
+//        if (event.getInitiator().getId().equals(requesterId)) {
+//            log.info("{}: attempt to create participationRequest by an event initiator with requesterId: {}, eventId: {}, " +
+//                    "initiatorId: {}", className, requesterId, eventId, event.getInitiator().getId());
+//            throw new ConflictException("Initiator can't create participation request.", "requesterId: "
+//                    + requesterId + " equals to initiatorId: " + event.getInitiator().getId());
+//        }
 
         if (event.getPublishedOn() == null) {
             log.info("{}: attempt to create participationRequest for not published event with " +

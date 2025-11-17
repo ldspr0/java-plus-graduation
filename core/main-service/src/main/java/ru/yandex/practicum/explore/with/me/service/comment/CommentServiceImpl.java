@@ -17,12 +17,12 @@ import ru.yandex.practicum.explore.with.me.model.comment.CommentUpdateDto;
 import ru.yandex.practicum.explore.with.me.model.comment.CommentUserDto;
 import ru.yandex.practicum.explore.with.me.model.comment.CreateUpdateCommentDto;
 import ru.yandex.practicum.explore.with.me.model.event.Event;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestStatus;
-import ru.yandex.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.request_service.model.ParticipationRequestStatus;
+import ru.yandex.practicum.user_service.model.User;
 import ru.yandex.practicum.explore.with.me.repository.CommentRepository;
 import ru.yandex.practicum.explore.with.me.repository.EventRepository;
-import ru.yandex.practicum.explore.with.me.repository.ParticipationRequestRepository;
-import ru.yandex.practicum.explore.with.me.repository.UserRepository;
+import ru.yandex.practicum.request_service.repository.ParticipationRequestRepository;
+import ru.yandex.practicum.user_service.repository.UserRepository;
 import ru.yandex.practicum.explore.with.me.util.ExistenceValidator;
 
 import java.time.LocalDateTime;
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
 
         User author = userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    log.info("{}: attempt to find user with id: {}", className, userId);
+                            log.info("{}: attempt to find user with id: {}", className, userId);
                             return new NotFoundException(
                                     OBJECT_NOT_FOUND,
                                     String.format("User with id: %d was not found", userId));
@@ -81,7 +81,7 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> {
-                    log.info("{}: attempt to find event with id: {}", className, eventId);
+                            log.info("{}: attempt to find event with id: {}", className, eventId);
                             return new NotFoundException(
                                     OBJECT_NOT_FOUND,
                                     String.format("Event with id: %d was not found", eventId));
@@ -187,7 +187,7 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
     private Comment getOrThrow(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.info("{}: comment with id: {} was not found", className, id);
+                            log.info("{}: comment with id: {} was not found", className, id);
                             return new NotFoundException(
                                     OBJECT_NOT_FOUND,
                                     String.format("Comment with id: %d was not found", id));

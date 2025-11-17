@@ -1,9 +1,9 @@
-package ru.yandex.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.request_service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestDto;
+import ru.yandex.practicum.request_service.model.ParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequestDto;
 
 @Mapper(componentModel = "spring")
 public interface ParticipationRequestMapper {

@@ -8,7 +8,7 @@ import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
 import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
 import ru.yandex.practicum.explore.with.me.model.event.EventState;
 import ru.yandex.practicum.explore.with.me.model.event.Location;
-import ru.yandex.practicum.explore.with.me.model.user.UserShortDto;
+import ru.yandex.practicum.user_service.model.UserShortDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,8 +1,8 @@
-package ru.yandex.practicum.explore.with.me.service.participation.request;
+package ru.yandex.practicum.request_service.service;
 
-import ru.yandex.practicum.explore.with.me.model.participation.CancelParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.NewParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestDto;
+import ru.yandex.practicum.request_service.model.CancelParticipationRequest;
+import ru.yandex.practicum.request_service.model.NewParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequestDto;
 
 import java.util.List;
 

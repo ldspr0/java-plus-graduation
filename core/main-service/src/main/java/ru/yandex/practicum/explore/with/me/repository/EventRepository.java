@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.yandex.practicum.explore.with.me.model.event.Event;
 import ru.yandex.practicum.explore.with.me.model.event.EventState;
-import ru.yandex.practicum.explore.with.me.model.user.User;
+import ru.yandex.practicum.user_service.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;

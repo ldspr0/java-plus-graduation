@@ -1,4 +1,4 @@
-package ru.yandex.practicum.explore.with.me.controller.participation.request;
+package ru.yandex.practicum.request_service.controller;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.explore.with.me.model.participation.CancelParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.NewParticipationRequest;
-import ru.yandex.practicum.explore.with.me.model.participation.ParticipationRequestDto;
-import ru.yandex.practicum.explore.with.me.service.participation.request.ParticipationRequestService;
+import ru.yandex.practicum.request_service.model.CancelParticipationRequest;
+import ru.yandex.practicum.request_service.model.NewParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequestDto;
+import ru.yandex.practicum.request_service.service.ParticipationRequestService;
 
 import java.util.List;
 
