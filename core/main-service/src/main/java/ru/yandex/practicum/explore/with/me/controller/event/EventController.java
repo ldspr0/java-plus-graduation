@@ -18,6 +18,7 @@ import ru.yandex.practicum.core_api.model.event.AdminEventFilter;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.core_api.model.event.dto.*;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 import ru.yandex.practicum.core_api.util.StatSaver;
 import ru.yandex.practicum.explore.with.me.service.event.EventAdminService;
 import ru.yandex.practicum.explore.with.me.service.event.EventService;
@@ -67,9 +68,9 @@ public class EventController implements EventInterface {
     @Override
     @GetMapping("/users/{userId}/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long userId,
-                                     @PathVariable @PositiveOrZero @NotNull Long eventId) {
-        log.trace("{}: getEventById() call with userId: {}, eventId: {}", className, userId, eventId);
+    public EventFullDto getEventByIdForUser(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                            @PathVariable @PositiveOrZero @NotNull Long eventId) {
+        log.trace("{}: getEventByIdForUser() call with userId: {}, eventId: {}", className, userId, eventId);
         return eventsService.getPrivateEventById(userId, eventId);
     }
 
@@ -130,7 +131,28 @@ public class EventController implements EventInterface {
     public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId,
                                      HttpServletRequest request) {
         statSaver.save(request, className);
-        log.trace("{}: getEventById() call with eventId: {}", className, eventId);
+        log.trace("{}: getEventByIdForUser() call with eventId: {}", className, eventId);
         return eventsService.getPublicEventById(eventId);
+    }
+
+    @Override
+    @GetMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                             @PathVariable @PositiveOrZero @NotNull Long eventId) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
+                className, userId, eventId);
+        return eventsService.getEventParticipationRequestsByUser(userId, eventId);
+    }
+
+    @Override
+    @PatchMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                   @PathVariable @PositiveOrZero @NotNull Long eventId,
+                                                                   @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}, updateRequest: {}",
+                className, userId, eventId, updateRequest);
+        return null; //eventsService.updateEventRequestStatus(userId, eventId, updateRequest);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.user_service.mapper.UserMapper;
+import ru.yandex.practicum.core_api.mapper.UserMapper;
 import ru.yandex.practicum.core_api.model.user.AdminUserFindParam;
 import ru.yandex.practicum.core_api.model.user.NewUserRequest;
 import ru.yandex.practicum.core_api.model.user.User;

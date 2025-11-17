@@ -11,8 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.BadRequestException;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.explore.with.me.mapper.EventMapper;
-import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
+import ru.yandex.practicum.core_api.feign.RequestServiceClient;
+import ru.yandex.practicum.core_api.mapper.EventMapper;
+import ru.yandex.practicum.core_api.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.category.Category;
 import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
@@ -20,35 +21,26 @@ import ru.yandex.practicum.core_api.model.event.EventState;
 import ru.yandex.practicum.core_api.model.event.EventStatistics;
 import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
-import ru.yandex.practicum.core_api.model.event.dto.StatusUpdateRequest;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserAction;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 import ru.yandex.practicum.core_api.model.user.User;
+import ru.yandex.practicum.core_api.util.FeignExistenceValidator;
 import ru.yandex.practicum.explore.with.me.repository.CategoryRepository;
 import ru.yandex.practicum.explore.with.me.repository.EventRepository;
-import ru.yandex.practicum.request_service.repository.ParticipationRequestRepository;
-import ru.yandex.practicum.user_service.repository.UserRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 import ru.yandex.practicum.core_api.util.StatsGetter;
 import ru.yandex.practicum.stats.dto.ViewStats;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +49,12 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final String className = this.getClass().getSimpleName();
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
-    private final ParticipationRequestRepository requestRepository;
     private final ParticipationRequestMapper requestMapper;
+    private final RequestServiceClient requestServiceClient;
+    private final FeignExistenceValidator feignExistenceValidator;
 
     @Transactional
     @Override
@@ -179,71 +171,9 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId) {
         getEventIfInitiatedByUser(userId, eventId);
-        List<ParticipationRequest> requestsByEventId = requestRepository.findAllByEventId(eventId);
+
+        List<ParticipationRequest> requestsByEventId = eventRepository.findParticipationRequestsByEventId(userId, eventId);
         return requestsByEventId.stream().map(requestMapper::toDto).toList();
-    }
-
-    @Override
-    @Transactional
-    public EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId,
-                                                                   EventRequestStatusUpdateRequest updateRequest) {
-        Event event = getEventIfInitiatedByUser(userId, eventId);
-        List<ParticipationRequest> requestsByEventId = requestRepository.findAllById(updateRequest.getRequestIds());
-
-        if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
-            return new EventRequestStatusUpdateResult(
-                    requestsByEventId.stream().map(requestMapper::toDto).toList(), List.of());
-        }
-
-        List<ParticipationRequest> alreadyConfirmed = requestRepository
-                .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
-        AtomicInteger remainingSpots = new AtomicInteger(event.getParticipantLimit() - alreadyConfirmed.size());
-
-        if (remainingSpots.get() <= 0) {
-            throw new ConflictException("For the requested operation the conditions are not met.",
-                    "The participant limit has been reached");
-        }
-
-        requestsByEventId.forEach(request -> {
-            if (request.getStatus() != ParticipationRequestStatus.PENDING) {
-                throw new ConflictException("For the requested operation the conditions are not met.",
-                        "It's not allowed to change the status of the request");
-            }
-        });
-
-        List<ParticipationRequestDto> confirmedDto = new ArrayList<>();
-        List<ParticipationRequestDto> rejectedDto = new ArrayList<>();
-
-        requestsByEventId.forEach(request -> {
-            if (remainingSpots.get() > 0 && updateRequest.getStatus() == StatusUpdateRequest.CONFIRMED) {
-                request.setStatus(ParticipationRequestStatus.CONFIRMED);
-                confirmedDto.add(requestMapper.toDto(request));
-                remainingSpots.getAndDecrement();
-            } else {
-                request.setStatus(ParticipationRequestStatus.REJECTED);
-                rejectedDto.add(requestMapper.toDto(request));
-            }
-        });
-
-        if (!confirmedDto.isEmpty()) {
-            requestRepository.updateStatus(
-                    confirmedDto.stream().map(ParticipationRequestDto::getId).toList(),
-                    ParticipationRequestStatus.CONFIRMED);
-        }
-        if (!rejectedDto.isEmpty()) {
-            requestRepository.updateStatus(
-                    rejectedDto.stream().map(ParticipationRequestDto::getId).toList(),
-                    ParticipationRequestStatus.REJECTED);
-        }
-        if (remainingSpots.get() == 0) {
-            List<Long> pendingIds = requestRepository
-                    .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.PENDING)
-                    .stream().map(ParticipationRequest::getId).toList();
-            if (!pendingIds.isEmpty()) {
-                requestRepository.updateStatus(pendingIds, ParticipationRequestStatus.REJECTED);
-            }
-        }
-        return new EventRequestStatusUpdateResult(confirmedDto, rejectedDto);
     }
 
     @Transactional(readOnly = true)
@@ -323,22 +253,9 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         return views;
     }
 
-    @Override
-    public Map<Long, Integer> getConfirmedRequests(List<Long> eventIds) {
-        List<EventRequestCount> confirmedRequests = requestRepository.countGroupByEventId(eventIds);
-        Map<Long, Integer> result = confirmedRequests.stream().collect(
-                Collectors.toMap(
-                        EventRequestCount::eventId,
-                        r -> r.count().intValue()
-                )
-        );
-        log.info("{}: result of getConfirmedRequests: {}", className, result);
-        return result;
-    }
 
     private Event getEventIfInitiatedByUser(long userId, long eventId) {
-        userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("The required object was not found.", "User with id=" + userId + " was not found"));
+        feignExistenceValidator.validateUserExists(userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("The required object was not found.", "Event with id=" + eventId + " was not found"));
 
@@ -352,10 +269,8 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     }
 
     private User findUserByIdOrElseThrow(long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> {
-            log.info("{}: user with id: {} was not found", className, userId);
-            return new NotFoundException("The required object was not found.", "User with id=" + userId + " was not found");
-        });
+        return feignExistenceValidator.getUserById(userId);
+
     }
 
     private Category findCategoryByIdOrElseThrow(long categoryId) {
@@ -403,7 +318,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
                 .end(end)
                 .eventIds(eventIds).unique(true).build();
         Map<Long, Long> viewStats = getEventViews(params);
-        Map<Long, Integer> confirmedRequests = getConfirmedRequests(eventIds);
+        Map<Long, Integer> confirmedRequests = new HashMap<>();// getConfirmedRequests(eventIds);
         EventStatistics result = new EventStatistics(viewStats, confirmedRequests);
         log.info("{}: result of getEventStatistics(): {}", className, result);
         return result;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.request_service.mapper;
+package ru.yandex.practicum.core_api.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

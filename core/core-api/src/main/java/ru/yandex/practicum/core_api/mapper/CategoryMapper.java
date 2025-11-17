@@ -1,4 +1,4 @@
-package ru.yandex.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.core_api.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,4 +13,7 @@ public interface CategoryMapper {
     Category toModel(NewCategoryDto newCategoryDto);
 
     CategoryDto toDto(Category category);
+
+    @Mapping(target = "events", ignore = true)
+    Category toEntity(CategoryDto categoryDto);
 }

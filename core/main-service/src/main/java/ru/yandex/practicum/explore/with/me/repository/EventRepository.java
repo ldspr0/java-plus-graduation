@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventState;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
+
+    @Query("SELECT pr FROM ParticipationRequest pr WHERE pr.event.id = :eventId AND pr.event.initiator.id = :userId")
+    List<ParticipationRequest> findParticipationRequestsByEventId(@Param("userId") long userId,
+                                                                  @Param("eventId") long eventId);
+
     @Query("""
             SELECT DISTINCT e FROM Event e
             WHERE e.initiator = :user

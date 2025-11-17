@@ -1,4 +1,4 @@
-package ru.yandex.practicum.explore.with.me.mapper;
+package ru.yandex.practicum.core_api.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -11,7 +11,6 @@ import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventAdminRequestDto;
-import ru.yandex.practicum.user_service.mapper.UserMapper;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class, CommentMapper.class})
 public interface EventMapper {
@@ -31,6 +30,9 @@ public interface EventMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "comments", ignore = true)
     Event toModel(NewEventDto eventDto);
+
+    @Mapping(target = "comments", ignore = true)
+    Event toEntity(EventFullDto eventFullDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "category", ignore = true)

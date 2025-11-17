@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.explore.with.me.mapper.EventMapper;
+import ru.yandex.practicum.core_api.mapper.EventMapper;
 import ru.yandex.practicum.core_api.model.event.AdminEventFilter;
 import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventState;

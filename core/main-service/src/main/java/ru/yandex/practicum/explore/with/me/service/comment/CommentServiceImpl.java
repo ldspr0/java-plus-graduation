@@ -10,19 +10,16 @@ import ru.yandex.practicum.core_api.exception.BadRequestException;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.ForbiddenException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.explore.with.me.mapper.CommentMapper;
+import ru.yandex.practicum.core_api.mapper.CommentMapper;
 import ru.yandex.practicum.core_api.model.comment.Comment;
 import ru.yandex.practicum.core_api.model.comment.CommentDto;
 import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
 import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
 import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
 import ru.yandex.practicum.core_api.model.event.Event;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 import ru.yandex.practicum.core_api.model.user.User;
+import ru.yandex.practicum.core_api.util.FeignExistenceValidator;
 import ru.yandex.practicum.explore.with.me.repository.CommentRepository;
-import ru.yandex.practicum.explore.with.me.repository.EventRepository;
-import ru.yandex.practicum.request_service.repository.ParticipationRequestRepository;
-import ru.yandex.practicum.user_service.repository.UserRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
 import java.time.LocalDateTime;
@@ -39,13 +36,8 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
     private final String className = this.getClass().getSimpleName();
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final EventRepository eventRepository;
-    private final ParticipationRequestRepository requestRepository;
-    private final ExistenceValidator<User> userExistenceValidator;
-    private final ExistenceValidator<Event> eventExistenceValidator;
+    private final FeignExistenceValidator feignExistenceValidator;
     private final CommentMapper mapper;
-
 
     // admin
 
@@ -63,44 +55,30 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
         commentRepository.deleteById(id);
     }
 
-
     //private
 
     @Override
     public CommentDto createComment(Long userId, Long eventId, CreateUpdateCommentDto dto) {
         validateText(dto.getText(), 100);
 
-        User author = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                            log.info("{}: attempt to find user with id: {}", className, userId);
-                            return new NotFoundException(
-                                    OBJECT_NOT_FOUND,
-                                    String.format("User with id: %d was not found", userId));
-                        }
-                );
+        // Проверяем существование пользователя и события через Feign
+        feignExistenceValidator.validateUserExists(userId);
+        feignExistenceValidator.validateEventExists(eventId);
 
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> {
-                            log.info("{}: attempt to find event with id: {}", className, eventId);
-                            return new NotFoundException(
-                                    OBJECT_NOT_FOUND,
-                                    String.format("Event with id: %d was not found", eventId));
-                        }
-                );
+        // Получаем пользователя и событие как entity
+        User author = feignExistenceValidator.getUserById(userId);
+        Event event = feignExistenceValidator.getEventById(eventId);
 
-        if (event.getEventDate().isBefore(LocalDateTime.now())) {
+        // Проверяем, что событие уже прошло
+        if (event.getEventDate().isAfter(LocalDateTime.now())) {
             log.info("CommentServiceImpl: attempt to comment event, which has not been happened yet");
             throw new ConflictException(CONDITIONS_NOT_MET, "Only past events can be commented on");
         }
 
-        if (!requestRepository
-                .existsByRequesterIdAndEventIdAndStatus(
-                        userId,
-                        eventId,
-                        ParticipationRequestStatus.CONFIRMED
-                )) {
+        // Проверяем, что пользователь участвовал в событии через Feign
+        if (!feignExistenceValidator.isParticipantApproved(userId, eventId)) {
             log.info("{}: attempt to comment on event with id: {}, " +
-                    "in which user with id: {} did not participate", className, event, userId);
+                    "in which user with id: {} did not participate", className, eventId, userId);
             throw new ConflictException(CONDITIONS_NOT_MET, "Only events the user participated in can be commented on");
         }
 
@@ -115,7 +93,8 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
 
     @Override
     public CommentUpdateDto updateComment(Long userId, Long commentId, CreateUpdateCommentDto dto) {
-        userExistenceValidator.validateExists(userId);
+        // Проверяем существование пользователя через Feign
+        feignExistenceValidator.validateUserExists(userId);
         validateText(dto.getText(), 1000);
 
         Comment comment = getOrThrow(commentId);
@@ -135,7 +114,8 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
 
     @Override
     public void deleteCommentByAuthor(Long userId, Long commentId) {
-        userExistenceValidator.validateExists(userId);
+        // Проверяем существование пользователя через Feign
+        feignExistenceValidator.validateUserExists(userId);
         Comment comment = getOrThrow(commentId);
 
         if (!comment.getAuthor().getId().equals(userId)) {
@@ -152,7 +132,9 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
     @Override
     @Transactional(readOnly = true)
     public List<CommentUserDto> getCommentsByAuthor(Long userId, Pageable pageable) {
-        userExistenceValidator.validateExists(userId);
+        // Проверяем существование пользователя через Feign
+        feignExistenceValidator.validateUserExists(userId);
+
         List<CommentUserDto> result = commentRepository.findByAuthorIdOrderByCreatedOnDesc(userId, pageable)
                 .stream()
                 .map(mapper::toUserDto)
@@ -161,13 +143,14 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
         return result;
     }
 
-
     //public
 
     @Override
     @Transactional(readOnly = true)
     public List<CommentDto> getCommentsByEvent(Long eventId, Pageable pageable) {
-        eventExistenceValidator.validateExists(eventId);
+        // Проверяем существование события через Feign
+        feignExistenceValidator.validateEventExists(eventId);
+
         List<CommentDto> result = commentRepository.findByEventIdOrderByCreatedOnDesc(eventId, pageable)
                 .stream()
                 .map(mapper::toDto)
@@ -175,7 +158,6 @@ public class CommentServiceImpl implements CommentService, ExistenceValidator<Co
         log.info("{}: result of getCommentsByEvent(): {}", className, result);
         return result;
     }
-
 
     private void validateText(String text, int max) {
         if (text == null || text.isBlank() || text.length() > max) {

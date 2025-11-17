@@ -31,12 +31,7 @@ public interface EventService {
 
     List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId);
 
-    EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId,
-                                                            EventRequestStatusUpdateRequest updateRequest);
-
     List<EventShortDto> getPublicEvents(PublicEventParam params);
-
-    Map<Long, Integer> getConfirmedRequests(List<Long> eventIds);
 
     EventStatistics getEventStatistics(List<Event> events, LocalDateTime startStats, LocalDateTime endStats);
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.dto.*;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +38,8 @@ public interface EventInterface {
 
     @GetMapping("/users/{userId}/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    EventFullDto getEventById(@PathVariable("userId") @PositiveOrZero @NotNull Long userId,
-                              @PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
+    EventFullDto getEventByIdForUser(@PathVariable("userId") @PositiveOrZero @NotNull Long userId,
+                                     @PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
 
 
     @PatchMapping("/users/{userId}/events/{eventId}")
@@ -66,13 +67,30 @@ public interface EventInterface {
     @ResponseStatus(HttpStatus.OK)
     EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId,
                               HttpServletRequest request);
+
+    // Event participation requests
+    @GetMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable("userId")
+                                                                      @PositiveOrZero
+                                                                      @NotNull
+                                                                      Long userId,
+                                                                      @PathVariable("eventId")
+                                                                      @PositiveOrZero
+                                                                      @NotNull
+                                                                      Long eventId);
+
+    @PatchMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable("userId")
+                                                            @PositiveOrZero
+                                                            @NotNull
+                                                            Long userId,
+                                                            @PathVariable("eventId")
+                                                            @PositiveOrZero
+                                                            @NotNull
+                                                            Long eventId,
+                                                            @RequestBody
+                                                            @Valid
+                                                            EventRequestStatusUpdateRequest updateRequest);
 }
-
-/*
-@GetMapping("/events/{eventId}/comments")
-@ResponseStatus(HttpStatus.OK)
-List<CommentDto> getCommentsByEvent(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId,
-                                           @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero int from,
-                                           @RequestParam(value = "size", defaultValue = "10") @Positive int size);
-
- */

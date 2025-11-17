@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.explore.with.me.mapper.CompilationMapper;
+import ru.yandex.practicum.core_api.mapper.CompilationMapper;
 import ru.yandex.practicum.core_api.model.compilation.Compilation;
 import ru.yandex.practicum.core_api.model.compilation.CompilationCreateDto;
 import ru.yandex.practicum.core_api.model.compilation.CompilationRequestDto;

@@ -24,7 +24,7 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
     int countByEventId(Long eventId);
 
     @Query("""
-                SELECT new ru.yandex.practicum.explore.with.me.model.event.dto.EventRequestCount(r.event.id, COUNT(r))
+                SELECT new ru.yandex.practicum.core_api.model.event.dto.EventRequestCount(r.event.id, COUNT(r))
                     FROM ParticipationRequest r
                     WHERE r.event.id IN :eventIds
                     AND r.status = 'confirmed'

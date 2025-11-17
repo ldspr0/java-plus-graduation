@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,6 @@ import java.util.List;
 public class RequestController implements RequestInterface {
     private final String className = this.getClass().getSimpleName();
     private final ParticipationRequestService service;
-    private final EventService eventsService;
 
     @Override
     @GetMapping("/users/{userId}/requests")
@@ -34,7 +32,7 @@ public class RequestController implements RequestInterface {
                                               @NotNull(message = "must not be null")
                                               @PositiveOrZero(message = "must be positive or zero")
                                               Long userId) {
-        log.trace("{}: find() call with userId: {}", controllerName, userId);
+        log.trace("{}: find() call with userId: {}", className, userId);
         return service.find(userId);
     }
 
@@ -78,23 +76,11 @@ public class RequestController implements RequestInterface {
     }
 
     @Override
-    @GetMapping("/users/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable @PositiveOrZero @NotNull Long userId,
-                                                                             @PathVariable @PositiveOrZero @NotNull Long eventId) {
-        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
+    @GetMapping("/users/{userId}/events/{eventId}/participation")
+    public boolean isParticipantApproved(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                         @PathVariable @PositiveOrZero @NotNull Long eventId) {
+        log.trace("{}: isParticipantApproved() call with userId: {}, eventId: {}",
                 className, userId, eventId);
-        return eventsService.getEventParticipationRequestsByUser(userId, eventId);
-    }
-
-    @Override
-    @PatchMapping("/users/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    public EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable @PositiveOrZero @NotNull Long userId,
-                                                                   @PathVariable @PositiveOrZero @NotNull Long eventId,
-                                                                   @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest) {
-        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}, updateRequest: {}",
-                className, userId, eventId, updateRequest);
-        return eventsService.updateEventRequestStatus(userId, eventId, updateRequest);
+        return service.isParticipantApproved(userId, eventId);
     }
 }

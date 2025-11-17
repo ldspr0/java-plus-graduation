@@ -1,4 +1,4 @@
-package ru.yandex.practicum.user_service.mapper;
+package ru.yandex.practicum.core_api.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +15,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     User toEntity(NewUserRequest newUserRequest);
+
+    User toEntity(UserDto userDto);
 }
