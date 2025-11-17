@@ -5,12 +5,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.yandex.practicum.explore.with.me.model.event.Event;
-import ru.yandex.practicum.explore.with.me.model.event.EventStatistics;
-import ru.yandex.practicum.explore.with.me.model.event.dto.EventFullDto;
-import ru.yandex.practicum.explore.with.me.model.event.dto.EventShortDto;
-import ru.yandex.practicum.explore.with.me.model.event.dto.NewEventDto;
-import ru.yandex.practicum.explore.with.me.model.event.dto.UpdateEventAdminRequestDto;
+import ru.yandex.practicum.core_api.model.event.Event;
+import ru.yandex.practicum.core_api.model.event.EventStatistics;
+import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
+import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
+import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
+import ru.yandex.practicum.core_api.model.event.dto.UpdateEventAdminRequestDto;
 import ru.yandex.practicum.user_service.mapper.UserMapper;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class, CommentMapper.class})

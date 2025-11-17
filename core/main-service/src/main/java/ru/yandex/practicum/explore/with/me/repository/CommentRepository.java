@@ -2,7 +2,7 @@ package ru.yandex.practicum.explore.with.me.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.yandex.practicum.explore.with.me.model.comment.Comment;
+import ru.yandex.practicum.core_api.model.comment.Comment;
 
 import java.util.List;
 

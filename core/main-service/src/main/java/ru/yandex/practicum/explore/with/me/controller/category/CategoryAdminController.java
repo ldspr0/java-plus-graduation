@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.explore.with.me.model.category.CategoryDto;
-import ru.yandex.practicum.explore.with.me.model.category.NewCategoryDto;
+import ru.yandex.practicum.core_api.model.category.CategoryDto;
+import ru.yandex.practicum.core_api.model.category.NewCategoryDto;
 import ru.yandex.practicum.explore.with.me.service.category.CategoryServiceImpl;
 
 @RestController

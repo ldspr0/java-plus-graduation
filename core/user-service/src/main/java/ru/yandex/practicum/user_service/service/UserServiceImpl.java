@@ -6,17 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.user_service.exception.ConflictException;
-import ru.yandex.practicum.user_service.exception.NotFoundException;
+import ru.yandex.practicum.core_api.exception.ConflictException;
+import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.user_service.mapper.UserMapper;
-import ru.yandex.practicum.user_service.model.AdminUserFindParam;
-import ru.yandex.practicum.user_service.model.NewUserRequest;
-import ru.yandex.practicum.user_service.model.User;
-import ru.yandex.practicum.user_service.model.UserDto;
-import ru.yandex.practicum.user_service.model.UserShortDto;
+import ru.yandex.practicum.core_api.model.user.AdminUserFindParam;
+import ru.yandex.practicum.core_api.model.user.NewUserRequest;
+import ru.yandex.practicum.core_api.model.user.User;
+import ru.yandex.practicum.core_api.model.user.UserDto;
+import ru.yandex.practicum.core_api.model.user.UserShortDto;
 import ru.yandex.practicum.user_service.repository.UserRepository;
-import ru.yandex.practicum.user_service.util.DataProvider;
-import ru.yandex.practicum.user_service.util.ExistenceValidator;
+import ru.yandex.practicum.core_api.util.DataProvider;
+import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
 import java.util.List;
 

@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.practicum.explore.with.me.model.event.dto.EventRequestCount;
-import ru.yandex.practicum.request_service.model.ParticipationRequest;
-import ru.yandex.practicum.request_service.model.ParticipationRequestStatus;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 
 import java.util.List;
 

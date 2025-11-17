@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUpdateDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUserDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CreateUpdateCommentDto;
+import ru.yandex.practicum.core_api.model.comment.CommentDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
+import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
 import ru.yandex.practicum.explore.with.me.service.comment.CommentService;
 
 import java.util.List;

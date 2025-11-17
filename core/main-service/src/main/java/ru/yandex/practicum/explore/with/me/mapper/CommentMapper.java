@@ -2,11 +2,11 @@ package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.yandex.practicum.explore.with.me.model.comment.Comment;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUpdateDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUserDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CreateUpdateCommentDto;
+import ru.yandex.practicum.core_api.model.comment.Comment;
+import ru.yandex.practicum.core_api.model.comment.CommentDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
+import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
 import ru.yandex.practicum.user_service.mapper.UserMapper;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, EventMapper.class})

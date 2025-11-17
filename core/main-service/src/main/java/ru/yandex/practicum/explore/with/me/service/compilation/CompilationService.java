@@ -1,8 +1,8 @@
 package ru.yandex.practicum.explore.with.me.service.compilation;
 
-import ru.yandex.practicum.explore.with.me.model.compilation.CompilationCreateDto;
-import ru.yandex.practicum.explore.with.me.model.compilation.CompilationRequestDto;
-import ru.yandex.practicum.explore.with.me.model.compilation.CompilationUpdateDto;
+import ru.yandex.practicum.core_api.model.compilation.CompilationCreateDto;
+import ru.yandex.practicum.core_api.model.compilation.CompilationRequestDto;
+import ru.yandex.practicum.core_api.model.compilation.CompilationUpdateDto;
 
 import java.util.List;
 

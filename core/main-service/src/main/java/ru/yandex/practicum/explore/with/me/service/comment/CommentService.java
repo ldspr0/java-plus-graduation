@@ -1,10 +1,10 @@
 package ru.yandex.practicum.explore.with.me.service.comment;
 
 import org.springframework.data.domain.Pageable;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUpdateDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CommentUserDto;
-import ru.yandex.practicum.explore.with.me.model.comment.CreateUpdateCommentDto;
+import ru.yandex.practicum.core_api.model.comment.CommentDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
+import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
+import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
 
 import java.util.List;
 

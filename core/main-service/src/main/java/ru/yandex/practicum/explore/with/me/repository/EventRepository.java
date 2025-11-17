@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.practicum.explore.with.me.model.event.Event;
-import ru.yandex.practicum.explore.with.me.model.event.EventState;
-import ru.yandex.practicum.user_service.model.User;
+import ru.yandex.practicum.core_api.model.event.Event;
+import ru.yandex.practicum.core_api.model.event.EventState;
+import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
