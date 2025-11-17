@@ -1,5 +1,6 @@
 package ru.yandex.practicum.request_service.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -7,14 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.core_api.interfaces.RequestInterface;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
@@ -23,15 +20,16 @@ import ru.yandex.practicum.request_service.service.ParticipationRequestService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/{userId}/requests")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 @Slf4j
 @Validated
-public class ParticipationRequestPrivateController {
+public class RequestController implements RequestInterface {
+    private final String className = this.getClass().getSimpleName();
     private final ParticipationRequestService service;
-    private final String controllerName = this.getClass().getSimpleName();
+    private final EventService eventsService;
 
-    @GetMapping
+    @Override
+    @GetMapping("/users/{userId}/requests")
     public List<ParticipationRequestDto> find(@PathVariable
                                               @NotNull(message = "must not be null")
                                               @PositiveOrZero(message = "must be positive or zero")
@@ -40,7 +38,8 @@ public class ParticipationRequestPrivateController {
         return service.find(userId);
     }
 
-    @PostMapping
+    @Override
+    @PostMapping("/users/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto create(@PathVariable
                                           @NotNull(message = "must not be null")
@@ -50,7 +49,7 @@ public class ParticipationRequestPrivateController {
                                           @NotNull(message = "must not be null")
                                           @PositiveOrZero(message = "must be positive or zero")
                                           Long eventId) {
-        log.trace("{}: create() call with userId: {}, eventId: {}", controllerName, userId, eventId);
+        log.trace("{}: create() call with userId: {}, eventId: {}", className, userId, eventId);
 
         NewParticipationRequest newParticipationRequest = NewParticipationRequest.builder()
                 .userId(userId)
@@ -59,7 +58,8 @@ public class ParticipationRequestPrivateController {
         return service.create(newParticipationRequest);
     }
 
-    @PatchMapping("/{requestId}/cancel")
+    @Override
+    @PatchMapping("/users/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto cancel(@PathVariable
                                           @NotNull(message = "must not be null")
                                           @PositiveOrZero(message = "must be positive or zero")
@@ -68,12 +68,33 @@ public class ParticipationRequestPrivateController {
                                           @NotNull(message = "must not be null")
                                           @PositiveOrZero(message = "must be positive or zero")
                                           Long requestId) {
-        log.trace("{}: cancel() call with userId: {}, requestId: {}", controllerName, userId, requestId);
+        log.trace("{}: cancel() call with userId: {}, requestId: {}", className, userId, requestId);
 
         CancelParticipationRequest cancelParticipationRequest = CancelParticipationRequest.builder()
                 .userId(userId)
                 .requestId(requestId)
                 .build();
         return service.cancel(cancelParticipationRequest);
+    }
+
+    @Override
+    @GetMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                             @PathVariable @PositiveOrZero @NotNull Long eventId) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
+                className, userId, eventId);
+        return eventsService.getEventParticipationRequestsByUser(userId, eventId);
+    }
+
+    @Override
+    @PatchMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                   @PathVariable @PositiveOrZero @NotNull Long eventId,
+                                                                   @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}, updateRequest: {}",
+                className, userId, eventId, updateRequest);
+        return eventsService.updateEventRequestStatus(userId, eventId, updateRequest);
     }
 }
