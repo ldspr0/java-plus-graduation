@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.yandex.practicum.core_api.model.category.Category;
 import ru.yandex.practicum.core_api.model.comment.Comment;
-import ru.yandex.practicum.request_service.model.ParticipationRequest;
-import ru.yandex.practicum.user_service.model.User;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
+import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

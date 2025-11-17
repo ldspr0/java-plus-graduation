@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.yandex.practicum.core_api.model.event.Event;
-import ru.yandex.practicum.user_service.model.User;
+import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
 

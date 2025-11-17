@@ -3,7 +3,7 @@ package ru.yandex.practicum.core_api.model.event.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.request_service.model.ParticipationRequestDto;
+import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.util.List;
 

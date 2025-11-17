@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Data
 @Builder(toBuilder = true)
 public class ApiError {
-    // как-то странно, в спецификации это поле есть в классе,
-    // но не используется как таковое в теле ответа...
     @JsonIgnore
     private String errors;
     private HttpStatus status;
