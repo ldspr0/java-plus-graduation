@@ -1,4 +1,4 @@
-package ru.yandex.practicum.explore.with.me.model.user;
+package ru.yandex.practicum.user_service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

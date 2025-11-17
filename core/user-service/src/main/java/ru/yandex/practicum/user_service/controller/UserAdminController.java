@@ -1,4 +1,4 @@
-package ru.yandex.practicum.explore.with.me.controller.user;
+package ru.yandex.practicum.user_service.controller.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.explore.with.me.model.user.AdminUserFindParam;
-import ru.yandex.practicum.explore.with.me.model.user.NewUserRequest;
-import ru.yandex.practicum.explore.with.me.model.user.UserDto;
-import ru.yandex.practicum.explore.with.me.service.user.UserService;
+import ru.yandex.practicum.user_service.model.AdminUserFindParam;
+import ru.yandex.practicum.user_service.model.NewUserRequest;
+import ru.yandex.practicum.user_service.model.UserDto;
+import ru.yandex.practicum.user_service.service.UserService;
 
 import java.util.List;
 
