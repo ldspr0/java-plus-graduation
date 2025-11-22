@@ -32,6 +32,8 @@ import java.util.List;
 public class UserAdminController implements UserInterface {
     private final UserService service;
     private final String controllerName = this.getClass().getSimpleName();
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     @GetMapping("/admin/users")
@@ -42,8 +44,7 @@ public class UserAdminController implements UserInterface {
                               int from,
                               @RequestParam(defaultValue = "10")
                               @Positive(message = "must be positive")
-                              int size,
-                              HttpServletRequest request) {
+                              int size) {
         log.trace("{}: find() call with ids: {}, from: {}, size: {}", controllerName, ids, from, size);
 
         AdminUserFindParam param = AdminUserFindParam.builder()
@@ -59,8 +60,7 @@ public class UserAdminController implements UserInterface {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody
                           @Valid
-                          NewUserRequest newUserRequest,
-                          HttpServletRequest request) {
+                          NewUserRequest newUserRequest) {
         log.trace("{}: create() call with newUserRequest: {}", controllerName, newUserRequest);
         return service.create(newUserRequest);
     }
@@ -70,8 +70,7 @@ public class UserAdminController implements UserInterface {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable
                        @Positive(message = "must be positive")
-                       Long userId,
-                       HttpServletRequest request) {
+                       Long userId) {
         log.trace("{}: delete() call with userId: {}", controllerName, userId);
         service.delete(userId);
     }

@@ -38,7 +38,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     private final String className = this.getClass().getSimpleName();
     private final ParticipationRequestRepository participationRequestRepository;
-    //    private final FeignExistenceValidator feignExistenceValidator;
     private final ParticipationRequestMapper participationRequestMapper;
     private final EventServiceClient eventServiceClient;
     private final UserServiceClient userServiceClient;
@@ -46,7 +45,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     public List<ParticipationRequestDto> find(Long userId) {
-//        feignExistenceValidator.validateUserExists(userId);
 
         List<ParticipationRequestDto> result = participationRequestRepository.findAllByRequesterId(userId).stream()
                 .map(this::getDto)
@@ -58,10 +56,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     @Transactional
     public ParticipationRequestDto create(NewParticipationRequest newParticipationRequest) {
-        // check eventId Not Found
-        // check for userId
-
-
         Long requesterId = newParticipationRequest.getUserId();
         Long eventId = newParticipationRequest.getEventId();
 

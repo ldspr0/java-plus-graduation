@@ -7,7 +7,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {
         "ru.yandex.practicum.request_service",
-        "ru.yandex.practicum.user_service",
         "ru.yandex.practicum.core_api.exception"
 })
 @EnableDiscoveryClient

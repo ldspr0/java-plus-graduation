@@ -23,16 +23,13 @@ public interface UserInterface {
                        @RequestParam(value = "from", defaultValue = "0")
                        @PositiveOrZero(message = "must be positive or zero") int from,
                        @RequestParam(value = "size", defaultValue = "10")
-                       @Positive(message = "must be positive") int size,
-                       HttpServletRequest request);
+                       @Positive(message = "must be positive") int size);
 
     @PostMapping("/admin/users")
     @ResponseStatus(HttpStatus.CREATED)
-    UserDto create(@RequestBody @Valid NewUserRequest newUserRequest,
-                   HttpServletRequest request);
+    UserDto create(@RequestBody @Valid NewUserRequest newUserRequest);
 
     @DeleteMapping("/admin/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void delete(@PathVariable("userId") @Positive(message = "must be positive") Long userId,
-                HttpServletRequest request);
+    void delete(@PathVariable("userId") @Positive(message = "must be positive") Long userId);
 }
