@@ -44,7 +44,7 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
             """)
     void updateStatus(@Param("requestIds") List<Long> requestIds, @Param("status") ParticipationRequestStatus status);
 
-    @Query("SELECT pr FROM ParticipationRequest pr WHERE pr.event.id = :eventId AND pr.event.initiator.id = :userId")
+    @Query("SELECT pr FROM ParticipationRequest pr WHERE pr.eventId = :eventId AND pr.requesterId = :userId")
     List<ParticipationRequest> findParticipationRequestsByEventId(@Param("userId") long userId,
                                                                   @Param("eventId") long eventId);
 
