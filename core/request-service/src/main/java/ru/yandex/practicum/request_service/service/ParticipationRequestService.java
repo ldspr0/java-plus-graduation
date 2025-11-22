@@ -15,6 +15,8 @@ public interface ParticipationRequestService {
 
     ParticipationRequestDto cancel(CancelParticipationRequest cancelParticipationRequest);
 
+    List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId);
+
     boolean isParticipantApproved(Long userId, Long eventId);
 
     EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId, EventRequestStatusUpdateRequest updateRequest);

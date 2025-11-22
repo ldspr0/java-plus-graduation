@@ -27,7 +27,6 @@ public interface EventService {
 
     Map<Long, Long> getEventViews(EventViewsParameters params);
 
-    List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId);
 
     List<EventShortDto> getPublicEvents(PublicEventParam params);
 

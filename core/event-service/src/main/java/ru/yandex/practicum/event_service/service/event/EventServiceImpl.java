@@ -164,15 +164,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         return result;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId) {
-        getEventIfInitiatedByUser(userId, eventId);
 
-//        List<ParticipationRequest> requestsByEventId = eventRepository.findParticipationRequestsByEventId(userId, eventId);
-//        return requestsByEventId.stream().map(requestMapper::toDto).toList();
-        return null;
-    }
 
     @Transactional(readOnly = true)
     public EventFullDto getPublicEventById(long eventId) {

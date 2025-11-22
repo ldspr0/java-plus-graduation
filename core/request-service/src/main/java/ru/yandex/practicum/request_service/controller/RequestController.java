@@ -94,4 +94,14 @@ public class RequestController implements RequestInterface {
                 className, userId, eventId, updateRequest);
         return service.updateEventRequestStatus(userId, eventId, updateRequest);
     }
+
+    @Override
+    @GetMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                             @PathVariable @PositiveOrZero @NotNull Long eventId) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
+                className, userId, eventId);
+        return service.getEventParticipationRequestsByUser(userId, eventId);
+    }
 }

@@ -68,16 +68,7 @@ public interface EventInterface {
     EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
 
     // Event participation requests
-    @GetMapping("/users/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable("userId")
-                                                                      @PositiveOrZero
-                                                                      @NotNull
-                                                                      Long userId,
-                                                                      @PathVariable("eventId")
-                                                                      @PositiveOrZero
-                                                                      @NotNull
-                                                                      Long eventId);
+
 
 
 }

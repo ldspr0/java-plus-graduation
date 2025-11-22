@@ -15,9 +15,6 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-//    @Query("SELECT pr FROM ParticipationRequest pr WHERE pr.event.id = :eventId AND pr.event.initiator.id = :userId")
-//    List<ParticipationRequest> findParticipationRequestsByEventId(@Param("userId") long userId,
-//                                                                  @Param("eventId") long eventId);
 
     @Query("""
             SELECT DISTINCT e FROM Event e

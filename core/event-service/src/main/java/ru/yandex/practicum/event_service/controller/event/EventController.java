@@ -137,15 +137,7 @@ public class EventController implements EventInterface {
         return eventsService.getPublicEventById(eventId);
     }
 
-    @Override
-    @GetMapping("/users/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable @PositiveOrZero @NotNull Long userId,
-                                                                             @PathVariable @PositiveOrZero @NotNull Long eventId) {
-        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
-                className, userId, eventId);
-        return eventsService.getEventParticipationRequestsByUser(userId, eventId);
-    }
+
 
 
 }

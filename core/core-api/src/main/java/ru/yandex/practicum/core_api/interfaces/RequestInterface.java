@@ -60,4 +60,14 @@ public interface RequestInterface {
                                                             @RequestBody
                                                             @Valid
                                                             EventRequestStatusUpdateRequest updateRequest);
+    @GetMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    List<ParticipationRequestDto> getEventParticipationRequestsByUser(@PathVariable("userId")
+                                                                      @PositiveOrZero
+                                                                      @NotNull
+                                                                      Long userId,
+                                                                      @PathVariable("eventId")
+                                                                      @PositiveOrZero
+                                                                      @NotNull
+                                                                      Long eventId);
 }
