@@ -60,7 +60,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     ", and eventId: " + eventId + " already exists");
         }
 
-        EventFullDto event = eventServiceClient.getEventById(eventId, null);
+        EventFullDto event = eventServiceClient.getEventById(eventId);
 
         if (event.getPublishedOn() == null) {
             log.info("{}: attempt to create participationRequest for not published event with " +

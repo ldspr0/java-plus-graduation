@@ -65,8 +65,7 @@ public interface EventInterface {
 
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId,
-                              HttpServletRequest request);
+    EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
 
     // Event participation requests
     @GetMapping("/users/{userId}/events/{eventId}/requests")

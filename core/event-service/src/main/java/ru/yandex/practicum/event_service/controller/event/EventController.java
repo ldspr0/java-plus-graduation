@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +37,8 @@ public class EventController implements EventInterface {
     private final EventAdminService service;
     private final EventService eventsService;
     private final StatSaver statSaver;
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     @GetMapping("/admin/events")
@@ -128,8 +131,7 @@ public class EventController implements EventInterface {
     @Override
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId,
-                                     HttpServletRequest request) {
+    public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId) {
         statSaver.save(request, className);
         log.trace("{}: getEventByIdForUser() call with eventId: {}", className, eventId);
         return eventsService.getPublicEventById(eventId);
