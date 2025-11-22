@@ -68,19 +68,19 @@ spring:
           filters:
             - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: event-service-private-events
-          uri: lb://event-service
-          predicates:
-            - Path=/users/*/events, /users/*/events/**
-          filters:
-            - CircuitBreaker=eventServiceCircuitBreaker
-
         - id: request-service-private-event-requests
           uri: lb://request-service
           predicates:
             - Path=/users/*/events/*/requests, /users/*/events/*/requests/**
           filters:
             - CircuitBreaker=requestServiceCircuitBreaker
+
+        - id: event-service-private-events
+          uri: lb://event-service
+          predicates:
+            - Path=/users/*/events, /users/*/events/**
+          filters:
+            - CircuitBreaker=eventServiceCircuitBreaker
 
         - id: stats-server-hit
           uri: lb://stats-server
