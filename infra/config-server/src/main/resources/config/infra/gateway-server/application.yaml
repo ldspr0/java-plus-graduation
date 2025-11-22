@@ -5,12 +5,26 @@ spring:
         locator:
           enabled: false
       routes:
-        - id: event-service-admin-users
-          uri: lb://event-service
+        - id: user-service-admin-users
+          uri: lb://user-service
           predicates:
             - Path=/admin/users, /admin/users/**
           filters:
-            - CircuitBreaker=eventServiceCircuitBreaker
+            - CircuitBreaker=userServiceCircuitBreaker
+
+        - id: request-service-private-requests
+          uri: lb://request-service
+          predicates:
+            - Path=/users/*/requests, /users/*/requests/**
+          filters:
+            - CircuitBreaker=requestServiceCircuitBreaker
+
+        - id: request-service-participation-check
+          uri: lb://request-service
+          predicates:
+            - Path=/users/*/events/*/participation
+          filters:
+            - CircuitBreaker=requestServiceCircuitBreaker
 
         - id: event-service-admin-categories
           uri: lb://event-service
@@ -61,10 +75,10 @@ spring:
           filters:
             - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: event-service-private-requests
+        - id: event-service-private-event-requests
           uri: lb://event-service
           predicates:
-            - Path=/users/*/requests, /users/*/requests/**
+            - Path=/users/*/events/*/requests, /users/*/events/*/requests/**
           filters:
             - CircuitBreaker=eventServiceCircuitBreaker
 
@@ -88,7 +102,25 @@ server:
 resilience4j:
   circuitbreaker:
     instances:
+      userServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
       eventServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        failure-rate-threshold: 50
+        event-consumer-buffer-size: 10
+      requestServiceCircuitBreaker:
         register-health-indicator: true
         sliding-window-size: 10
         minimum-number-of-calls: 5
