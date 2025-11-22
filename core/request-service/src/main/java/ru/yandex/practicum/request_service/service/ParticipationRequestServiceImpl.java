@@ -1,5 +1,6 @@
 package ru.yandex.practicum.request_service.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.EventServiceClient;
+import ru.yandex.practicum.core_api.feign.UserServiceClient;
 import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.event.dto.StatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.user.UserDto;
 import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
@@ -38,6 +41,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     //    private final FeignExistenceValidator feignExistenceValidator;
     private final ParticipationRequestMapper participationRequestMapper;
     private final EventServiceClient eventServiceClient;
+    private final UserServiceClient userServiceClient;
 
 
     @Override
@@ -54,6 +58,10 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     @Transactional
     public ParticipationRequestDto create(NewParticipationRequest newParticipationRequest) {
+        // check eventId Not Found
+        // check for userId
+
+
         Long requesterId = newParticipationRequest.getUserId();
         Long eventId = newParticipationRequest.getEventId();
 
@@ -65,7 +73,22 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     ", and eventId: " + eventId + " already exists");
         }
 
-        EventFullDto event = eventServiceClient.getEventById(eventId);
+        EventFullDto event;
+        UserDto user;
+
+        try {
+            event = eventServiceClient.getEventById(eventId);
+        } catch (FeignException.NotFound e) {
+            throw new ConflictException("Event not found",
+                    "Event with id=" + eventId + " was not found");
+        }
+
+        try {
+            user = userServiceClient.getUserById(requesterId);
+        } catch (FeignException.NotFound e) {
+            throw new ConflictException("User not found",
+                    "User with id=" + requesterId + " was not found");
+        }
 
         if (event.getPublishedOn() == null) {
             log.info("{}: attempt to create participationRequest for not published event with " +

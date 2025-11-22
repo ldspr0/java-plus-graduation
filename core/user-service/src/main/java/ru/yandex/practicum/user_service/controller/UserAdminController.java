@@ -76,4 +76,13 @@ public class UserAdminController implements UserInterface {
         service.delete(userId);
     }
 
+    @Override
+    @GetMapping("/admin/user/{userId}")
+    public UserDto getUserById(@PathVariable
+                        @Positive(message = "must be positive")
+                        Long userId) {
+        log.trace("{}: getUserById() call with userId: {}", controllerName, userId);
+        return service.getUserById(userId);
+    }
+
 }

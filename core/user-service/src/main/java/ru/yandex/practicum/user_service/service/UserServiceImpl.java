@@ -1,11 +1,13 @@
 package ru.yandex.practicum.user_service.service;
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.user_service.mapper.UserMapper;
@@ -91,5 +93,16 @@ public class UserServiceImpl implements UserService, ExistenceValidator<User>, D
             throw new ConflictException("The email of user should be unique.",
                     "User with email=" + email + " is already exist");
         }
+    }
+
+    @Override
+    public UserDto getUserById(@PathVariable
+                               @Positive(message = "must be positive")
+                               Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("The required object was not found.",
+                        "User with id=" + userId + " was not found"));
+
+        return mapUserDto(user);
     }
 }

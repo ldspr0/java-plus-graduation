@@ -13,6 +13,11 @@ import java.util.List;
 
 public interface UserInterface {
 
+    @GetMapping("/admin/user/{userId}")
+    UserDto getUserById(@PathVariable
+                        @Positive(message = "must be positive")
+                        Long userId);
+
     @GetMapping("/admin/users")
     List<UserDto> find(@RequestParam(value = "ids", required = false) List<Long> ids,
                        @RequestParam(value = "from", defaultValue = "0")
