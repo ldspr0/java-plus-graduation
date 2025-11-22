@@ -7,20 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.BadRequestException;
-import ru.yandex.practicum.core_api.exception.ConflictException;
-import ru.yandex.practicum.core_api.exception.ForbiddenException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.core_api.mapper.CommentMapper;
-import ru.yandex.practicum.core_api.model.comment.Comment;
+import ru.yandex.practicum.explore.with.me.mapper.CommentMapper;
+import ru.yandex.practicum.explore.with.me.model.Comment;
 import ru.yandex.practicum.core_api.model.comment.CommentDto;
 import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
 import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
 import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
-import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.explore.with.me.repository.CommentRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

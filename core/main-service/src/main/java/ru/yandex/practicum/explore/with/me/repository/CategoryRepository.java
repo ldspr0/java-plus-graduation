@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.practicum.core_api.model.category.Category;
+import ru.yandex.practicum.explore.with.me.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT COUNT(c) > 0 FROM Category c WHERE c.name = :name")

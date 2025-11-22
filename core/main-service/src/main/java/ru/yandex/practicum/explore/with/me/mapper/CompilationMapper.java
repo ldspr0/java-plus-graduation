@@ -1,11 +1,11 @@
-package ru.yandex.practicum.core_api.mapper;
+package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.yandex.practicum.core_api.model.compilation.Compilation;
+import ru.yandex.practicum.explore.with.me.model.Compilation;
 import ru.yandex.practicum.core_api.model.compilation.CompilationCreateDto;
 import ru.yandex.practicum.core_api.model.compilation.CompilationRequestDto;
-import ru.yandex.practicum.core_api.model.event.Event;
+import ru.yandex.practicum.explore.with.me.model.Event;
 
 import java.util.List;
 

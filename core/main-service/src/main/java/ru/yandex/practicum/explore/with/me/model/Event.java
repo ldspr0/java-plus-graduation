@@ -1,4 +1,4 @@
-package ru.yandex.practicum.core_api.model.event;
+package ru.yandex.practicum.explore.with.me.model;
 
 
 import jakarta.persistence.CascadeType;
@@ -18,8 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.yandex.practicum.core_api.model.category.Category;
-import ru.yandex.practicum.core_api.model.comment.Comment;
+import ru.yandex.practicum.core_api.model.event.EventState;
+import ru.yandex.practicum.core_api.model.event.EventStateConverter;
+import ru.yandex.practicum.core_api.model.event.Location;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

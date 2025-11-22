@@ -1,16 +1,16 @@
-package ru.yandex.practicum.core_api.mapper;
+package ru.yandex.practicum.explore.with.me.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventStatistics;
 import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventAdminRequestDto;
+import ru.yandex.practicum.explore.with.me.model.Event;
 
 @Mapper(componentModel = "spring", uses = {CategoryMapper.class, CommentMapper.class})
 public interface EventMapper {
@@ -26,7 +26,7 @@ public interface EventMapper {
     @Mapping(target = "createdOn", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "publishedOn", ignore = true)
     @Mapping(target = "state", ignore = true)
-    @Mapping(target = "initiator", ignore = true)
+    @Mapping(target = "initiatorId", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "comments", ignore = true)
     Event toModel(NewEventDto eventDto);
