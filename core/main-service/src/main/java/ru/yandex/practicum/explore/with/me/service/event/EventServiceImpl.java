@@ -28,8 +28,6 @@ import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserAction;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
-import ru.yandex.practicum.core_api.model.user.User;
-import ru.yandex.practicum.core_api.util.FeignExistenceValidator;
 import ru.yandex.practicum.explore.with.me.repository.CategoryRepository;
 import ru.yandex.practicum.explore.with.me.repository.EventRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
@@ -54,18 +52,17 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final StatsGetter statsGetter;
     private final ParticipationRequestMapper requestMapper;
     private final RequestServiceClient requestServiceClient;
-    private final FeignExistenceValidator feignExistenceValidator;
 
     @Transactional
     @Override
     public EventFullDto createEvent(long userId, NewEventDto eventDto) {
-        User user = findUserByIdOrElseThrow(userId);
+        //User user = findUserByIdOrElseThrow(userId);
 
         long categoryId = eventDto.getCategory();
         Category category = findCategoryByIdOrElseThrow(categoryId);
 
         Event event = eventMapper.toModel(eventDto);
-        event.setInitiator(user);
+        event.setInitiatorId(userId);
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event eventSaved = eventRepository.save(event);
@@ -151,9 +148,9 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getEventsByUser(long userId, int from, int count) {
-        User user = findUserByIdOrElseThrow(userId);
+//        User user = findUserByIdOrElseThrow(userId);
         Pageable pageable = PageRequest.of(from, count, Sort.by("createdOn").ascending());
-        List<Event> events = eventRepository.findEventsByUser(user, pageable).getContent();
+        List<Event> events = eventRepository.findEventsByUserId(userId, pageable).getContent();
         if (events.isEmpty()) {
             return List.of();
         }
@@ -255,11 +252,11 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
 
     private Event getEventIfInitiatedByUser(long userId, long eventId) {
-        feignExistenceValidator.validateUserExists(userId);
+//        feignExistenceValidator.validateUserExists(userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("The required object was not found.", "Event with id=" + eventId + " was not found"));
 
-        if (event.getInitiator().getId() != userId) {
+        if (event.getInitiatorId() != userId) {
             log.info("User {} cannot manipulate with the event with id {}", userId, eventId);
             throw new ConflictException("For the requested operation the conditions are not met.",
                     "Only initiator of event can can manipulate with it");
@@ -268,10 +265,10 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         return event;
     }
 
-    private User findUserByIdOrElseThrow(long userId) {
-        return feignExistenceValidator.getUserById(userId);
-
-    }
+//    private User findUserByIdOrElseThrow(long userId) {
+//        return feignExistenceValidator.getUserById(userId);
+//
+//    }
 
     private Category findCategoryByIdOrElseThrow(long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(() -> {

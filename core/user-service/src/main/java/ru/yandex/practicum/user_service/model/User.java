@@ -1,4 +1,4 @@
-package ru.yandex.practicum.core_api.model.user;
+package ru.yandex.practicum.user_service.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

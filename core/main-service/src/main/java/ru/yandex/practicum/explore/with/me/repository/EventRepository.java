@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventState;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
-import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,9 +21,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("""
             SELECT DISTINCT e FROM Event e
-            WHERE e.initiator = :user
+            WHERE e.initiatorId = :user
             """)
-    Page<Event> findEventsByUser(@Param("user") User user,
+    Page<Event> findEventsByUserId(@Param("user") Long userId,
                                  Pageable pageable);
 
     Optional<Event> findByIdAndState(Long id, EventState state);

@@ -8,7 +8,7 @@ import ru.yandex.practicum.core_api.model.comment.CommentUpdateDto;
 import ru.yandex.practicum.core_api.model.comment.CommentUserDto;
 import ru.yandex.practicum.core_api.model.comment.CreateUpdateCommentDto;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, EventMapper.class})
+@Mapper(componentModel = "spring", uses = {EventMapper.class})
 public interface CommentMapper {
     @Mapping(target = "eventDto", source = "event")
     @Mapping(target = "authorDto", source = "author")

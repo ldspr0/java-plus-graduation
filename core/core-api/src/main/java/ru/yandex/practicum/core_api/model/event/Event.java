@@ -21,7 +21,6 @@ import lombok.Setter;
 import ru.yandex.practicum.core_api.model.category.Category;
 import ru.yandex.practicum.core_api.model.comment.Comment;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
-import ru.yandex.practicum.core_api.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,9 +70,8 @@ public class Event {
     @Column(name = "title", length = 120)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id")
-    private User initiator;
+    private Long initiatorId;
 
     @Convert(converter = EventStateConverter.class)
     private EventState state;

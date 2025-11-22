@@ -3,7 +3,7 @@ package ru.yandex.practicum.user_service.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.practicum.core_api.model.user.User;
+import ru.yandex.practicum.user_service.model.User;
 
 import java.util.List;
 

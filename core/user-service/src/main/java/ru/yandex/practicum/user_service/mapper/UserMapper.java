@@ -1,9 +1,9 @@
-package ru.yandex.practicum.core_api.mapper;
+package ru.yandex.practicum.user_service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.yandex.practicum.core_api.model.user.NewUserRequest;
-import ru.yandex.practicum.core_api.model.user.User;
+import ru.yandex.practicum.user_service.model.User;
 import ru.yandex.practicum.core_api.model.user.UserDto;
 import ru.yandex.practicum.core_api.model.user.UserShortDto;
 
