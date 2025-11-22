@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
+import ru.yandex.practicum.core_api.feign.EventServiceClient;
+import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
 import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
@@ -29,6 +31,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     private final ParticipationRequestRepository participationRequestRepository;
 //    private final FeignExistenceValidator feignExistenceValidator;
     private final ParticipationRequestMapper participationRequestMapper;
+    private final EventServiceClient eventServiceClient;
 
 
     @Override
@@ -56,39 +59,37 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     ", and eventId: " + eventId + " already exists");
         }
 
-//        feignExistenceValidator.validateEventExists(eventId);
-//        feignExistenceValidator.validateUserExists(requesterId);
+        EventFullDto event = eventServiceClient.getEventById(eventId, null);
 
-//        Event event = feignExistenceValidator.getEventById(eventId);
+        if (event.getPublishedOn() == null) {
+            log.info("{}: attempt to create participationRequest for not published event with " +
+                    "requesterId: {}, eventId: {}", className, requesterId, eventId);
+            throw new ConflictException("Can't create participation request for unpublished event.",
+                    "event with id: " + eventId + " is not published yet");
+        }
 
-//        if (event.getPublishedOn() == null) {
-//            log.info("{}: attempt to create participationRequest for not published event with " +
-//                    "requesterId: {}, eventId: {}", className, requesterId, eventId);
-//            throw new ConflictException("Can't create participation request for unpublished event.",
-//                    "event with id: " + eventId + " is not published yet");
-//        }
-//
-//        if (event.getParticipantLimit() != 0) {
-//            List<ParticipationRequest> alreadyConfirmed = participationRequestRepository
-//                    .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
-//            AtomicInteger remainingSpots = new AtomicInteger(event.getParticipantLimit() - alreadyConfirmed.size());
-//            if (remainingSpots.get() <= 0) {
-//                log.info("{}: attempt to create participationRequest, but participantLimit: {} is reached",
-//                        className, event.getParticipantLimit());
-//                throw new ConflictException("Participant limit is reached.", "event with id: " + eventId +
-//                        " has participant limit of: " + event.getParticipantLimit());
-//            }
-//        }
-//
-//        ParticipationRequest request = mapEntity(newParticipationRequest);
-//        if (!event.isRequestModeration() || event.getParticipantLimit() == 0) {
-//            request.setStatus(ParticipationRequestStatus.CONFIRMED);
-//        }
+        // check participant limit on event
+        if (event.getParticipantLimit() != 0) {
+            List<ParticipationRequest> alreadyConfirmed = participationRequestRepository
+                    .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+            int remainingSpots = event.getParticipantLimit() - alreadyConfirmed.size();
+            if (remainingSpots <= 0) {
+                log.info("{}: attempt to create participationRequest, but participantLimit: {} is reached",
+                        className, event.getParticipantLimit());
+                throw new ConflictException("Participant limit is reached.", "event with id: " + eventId +
+                        " has participant limit of: " + event.getParticipantLimit());
+            }
+        }
 
-//        ParticipationRequestDto result = getDto(participationRequestRepository.save(request));
-//        log.info("{}: result of create():: {}", className, result);
-//        return result;
-        return null;
+        ParticipationRequest request = mapEntity(newParticipationRequest);
+
+        if (!event.isRequestModeration()) {
+            request.setStatus(ParticipationRequestStatus.CONFIRMED);
+        }
+
+        ParticipationRequestDto result = getDto(participationRequestRepository.save(request));
+        log.info("{}: result of create():: {}", className, result);
+        return result;
     }
 
     @Override
