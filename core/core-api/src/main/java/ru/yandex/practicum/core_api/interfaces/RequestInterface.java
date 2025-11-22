@@ -1,9 +1,12 @@
 package ru.yandex.practicum.core_api.interfaces;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.util.List;
@@ -44,5 +47,17 @@ public interface RequestInterface {
                                   @PathVariable("eventId")
                                   @NotNull @PositiveOrZero Long eventId);
 
-
+    @PatchMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable("userId")
+                                                            @PositiveOrZero
+                                                            @NotNull
+                                                            Long userId,
+                                                            @PathVariable("eventId")
+                                                            @PositiveOrZero
+                                                            @NotNull
+                                                            Long eventId,
+                                                            @RequestBody
+                                                            @Valid
+                                                            EventRequestStatusUpdateRequest updateRequest);
 }

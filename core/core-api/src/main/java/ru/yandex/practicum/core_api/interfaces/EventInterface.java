@@ -79,17 +79,5 @@ public interface EventInterface {
                                                                       @NotNull
                                                                       Long eventId);
 
-    @PatchMapping("/users/{userId}/events/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK)
-    EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable("userId")
-                                                            @PositiveOrZero
-                                                            @NotNull
-                                                            Long userId,
-                                                            @PathVariable("eventId")
-                                                            @PositiveOrZero
-                                                            @NotNull
-                                                            Long eventId,
-                                                            @RequestBody
-                                                            @Valid
-                                                            EventRequestStatusUpdateRequest updateRequest);
+
 }

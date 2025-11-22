@@ -83,4 +83,15 @@ public class RequestController implements RequestInterface {
                 className, userId, eventId);
         return service.isParticipantApproved(userId, eventId);
     }
+
+    @Override
+    @PatchMapping("/users/{userId}/events/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable @PositiveOrZero @NotNull Long userId,
+                                                                   @PathVariable @PositiveOrZero @NotNull Long eventId,
+                                                                   @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest) {
+        log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}, updateRequest: {}",
+                className, userId, eventId, updateRequest);
+        return service.updateEventRequestStatus(userId, eventId, updateRequest);
+    }
 }

@@ -1,5 +1,7 @@
 package ru.yandex.practicum.request_service.service;
 
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
@@ -14,4 +16,6 @@ public interface ParticipationRequestService {
     ParticipationRequestDto cancel(CancelParticipationRequest cancelParticipationRequest);
 
     boolean isParticipantApproved(Long userId, Long eventId);
+
+    EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId, EventRequestStatusUpdateRequest updateRequest);
 }

@@ -9,6 +9,9 @@ import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.EventServiceClient;
 import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
+import ru.yandex.practicum.core_api.model.event.dto.StatusUpdateRequest;
 import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
@@ -20,7 +23,9 @@ import ru.yandex.practicum.core_api.util.DataProvider;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -160,5 +165,68 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                         eventId,
                         ParticipationRequestStatus.CONFIRMED
                 );
+    }
+
+    @Override
+    @Transactional
+    public EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId,
+                                                                   EventRequestStatusUpdateRequest updateRequest) {
+        EventFullDto event = eventServiceClient.getEventById(eventId);
+        List<ParticipationRequest> requestsByEventId = participationRequestRepository.findAllById(updateRequest.getRequestIds());
+
+        if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
+            return new EventRequestStatusUpdateResult(
+                    requestsByEventId.stream().map(participationRequestMapper::toDto).toList(), List.of());
+        }
+
+        List<ParticipationRequest> alreadyConfirmed = participationRequestRepository
+                .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
+        AtomicInteger remainingSpots = new AtomicInteger(event.getParticipantLimit() - alreadyConfirmed.size());
+
+        if (remainingSpots.get() <= 0) {
+            throw new ConflictException("For the requested operation the conditions are not met.",
+                    "The participant limit has been reached");
+        }
+
+        requestsByEventId.forEach(request -> {
+            if (request.getStatus() != ParticipationRequestStatus.PENDING) {
+                throw new ConflictException("For the requested operation the conditions are not met.",
+                        "It's not allowed to change the status of the request");
+            }
+        });
+
+        List<ParticipationRequestDto> confirmedDto = new ArrayList<>();
+        List<ParticipationRequestDto> rejectedDto = new ArrayList<>();
+
+        requestsByEventId.forEach(request -> {
+            if (remainingSpots.get() > 0 && updateRequest.getStatus() == StatusUpdateRequest.CONFIRMED) {
+                request.setStatus(ParticipationRequestStatus.CONFIRMED);
+                confirmedDto.add(participationRequestMapper.toDto(request));
+                remainingSpots.getAndDecrement();
+            } else {
+                request.setStatus(ParticipationRequestStatus.REJECTED);
+                rejectedDto.add(participationRequestMapper.toDto(request));
+            }
+        });
+
+        if (!confirmedDto.isEmpty()) {
+            participationRequestRepository.updateStatus(
+                    confirmedDto.stream().map(ParticipationRequestDto::getId).toList(),
+                    ParticipationRequestStatus.CONFIRMED);
+        }
+        if (!rejectedDto.isEmpty()) {
+            participationRequestRepository.updateStatus(
+                    rejectedDto.stream().map(ParticipationRequestDto::getId).toList(),
+                    ParticipationRequestStatus.REJECTED);
+        }
+        if (remainingSpots.get() == 0) {
+            List<Long> pendingIds = participationRequestRepository
+                    .findAllByEventIdAndStatus(eventId, ParticipationRequestStatus.PENDING)
+                    .stream().map(ParticipationRequest::getId).toList();
+            if (!pendingIds.isEmpty()) {
+                participationRequestRepository.updateStatus(pendingIds, ParticipationRequestStatus.REJECTED);
+            }
+        }
+        return new EventRequestStatusUpdateResult(confirmedDto, rejectedDto);
     }
 }
