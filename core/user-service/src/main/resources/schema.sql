@@ -5,3 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     CONSTRAINT pk_user PRIMARY KEY (id),
     CONSTRAINT uq_user_email UNIQUE (email)
 );
+
+CREATE INDEX IF NOT EXISTS idx_users_name ON users(name);
+CREATE INDEX IF NOT EXISTS idx_users_name_email ON users(name, email);

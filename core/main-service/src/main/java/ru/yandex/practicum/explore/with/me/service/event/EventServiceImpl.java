@@ -13,7 +13,7 @@ import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.RequestServiceClient;
 import ru.yandex.practicum.core_api.mapper.EventMapper;
-import ru.yandex.practicum.core_api.mapper.ParticipationRequestMapper;
+//import ru.yandex.practicum.core_api.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.category.Category;
 import ru.yandex.practicum.core_api.model.event.Event;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
@@ -26,7 +26,7 @@ import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserAction;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
+//import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 import ru.yandex.practicum.explore.with.me.repository.CategoryRepository;
 import ru.yandex.practicum.explore.with.me.repository.EventRepository;
@@ -50,7 +50,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
-    private final ParticipationRequestMapper requestMapper;
+//    private final ParticipationRequestMapper requestMapper;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
@@ -169,8 +169,9 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     public List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId) {
         getEventIfInitiatedByUser(userId, eventId);
 
-        List<ParticipationRequest> requestsByEventId = eventRepository.findParticipationRequestsByEventId(userId, eventId);
-        return requestsByEventId.stream().map(requestMapper::toDto).toList();
+//        List<ParticipationRequest> requestsByEventId = eventRepository.findParticipationRequestsByEventId(userId, eventId);
+//        return requestsByEventId.stream().map(requestMapper::toDto).toList();
+        return null;
     }
 
     @Transactional(readOnly = true)

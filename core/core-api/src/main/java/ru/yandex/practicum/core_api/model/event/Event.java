@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.yandex.practicum.core_api.model.category.Category;
 import ru.yandex.practicum.core_api.model.comment.Comment;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,6 +75,5 @@ public class Event {
     @Convert(converter = EventStateConverter.class)
     private EventState state;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ParticipationRequest> requests = new ArrayList<>();
+    private List<Long> requestsIds = new ArrayList<>();
 }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 
 import java.util.List;
@@ -23,18 +23,18 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
 
     int countByEventId(Long eventId);
 
-    @Query("""
-                SELECT new ru.yandex.practicum.core_api.model.event.dto.EventRequestCount(r.event.id, COUNT(r))
-                    FROM ParticipationRequest r
-                    WHERE r.event.id IN :eventIds
-                    AND r.status = 'confirmed'
-                    GROUP BY r.event.id
-            """)
-    List<EventRequestCount> countGroupByEventId(@Param("eventIds") List<Long> eventIds);
+//    @Query("""
+//                SELECT new ru.yandex.practicum.core_api.model.event.dto.EventRequestCount(r.event.id, COUNT(r))
+//                    FROM ParticipationRequest r
+//                    WHERE r.event.id IN :eventIds
+//                    AND r.status = 'confirmed'
+//                    GROUP BY r.event.id
+//            """)
+//    List<EventRequestCount> countGroupByEventId(@Param("eventIds") List<Long> eventIds);
 
-    List<ParticipationRequest> findAllByEventId(Long eventId);
+    //List<ParticipationRequest> findAllByEventId(Long eventId);
 
-    List<ParticipationRequest> findAllByEventIdAndStatus(Long eventId, ParticipationRequestStatus status);
+    //List<ParticipationRequest> findAllByEventIdAndStatus(Long eventId, ParticipationRequestStatus status);
 
     @Modifying
     @Query("""

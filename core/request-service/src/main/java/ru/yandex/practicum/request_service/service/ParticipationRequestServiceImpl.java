@@ -7,20 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
-import ru.yandex.practicum.core_api.model.event.Event;
-import ru.yandex.practicum.core_api.mapper.ParticipationRequestMapper;
+import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.NewParticipationRequest;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
+import ru.yandex.practicum.request_service.model.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 import ru.yandex.practicum.request_service.repository.ParticipationRequestRepository;
 import ru.yandex.practicum.core_api.util.DataProvider;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
