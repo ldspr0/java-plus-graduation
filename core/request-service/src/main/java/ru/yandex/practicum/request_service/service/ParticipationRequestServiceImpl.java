@@ -19,6 +19,7 @@ import ru.yandex.practicum.request_service.repository.ParticipationRequestReposi
 import ru.yandex.practicum.core_api.util.DataProvider;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,7 +30,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     private final String className = this.getClass().getSimpleName();
     private final ParticipationRequestRepository participationRequestRepository;
-//    private final FeignExistenceValidator feignExistenceValidator;
+    //    private final FeignExistenceValidator feignExistenceValidator;
     private final ParticipationRequestMapper participationRequestMapper;
     private final EventServiceClient eventServiceClient;
 
@@ -95,47 +96,45 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     @Transactional
     public ParticipationRequestDto cancel(CancelParticipationRequest cancelParticipationRequest) {
-//        ParticipationRequest request = participationRequestRepository
-//                .findById(cancelParticipationRequest.getRequestId())
-//                .orElseThrow(() -> {
-//                    log.info("{}: attempt to find participationRequest with id: {}",
-//                            cancelParticipationRequest, cancelParticipationRequest.getRequestId());
-//                    return new NotFoundException("The required object was not found.",
-//                            "ParticipationRequest with id=" + cancelParticipationRequest.getRequestId() +
-//                                    " was not found");
-//                });
-//        feignExistenceValidator.validateUserExists(cancelParticipationRequest.getUserId());
-//        if (!request.getRequester().getId().equals(cancelParticipationRequest.getUserId())) {
-//            log.info("{}: attempt to cancel participationRequest by not an owner", className);
-//            throw new ConflictException("Request can be cancelled only by an owner",
-//                    "User with id=" + cancelParticipationRequest.getUserId() +
-//                            " is not an owner of request with id=" + cancelParticipationRequest.getRequestId());
-//        }
-//
-//        ParticipationRequestDto result = participationRequestMapper.toDto(
-//                participationRequestRepository.findById(cancelParticipationRequest.getRequestId()).get());
-//        result.setStatus(ParticipationRequestStatus.CANCELED);
-//        participationRequestRepository.deleteById(cancelParticipationRequest.getRequestId());
-//
-//        log.info("{}: result of cancel(): {}, which has been deleted", className, result);
-//        return result;
-        return null;
+        ParticipationRequest request = participationRequestRepository
+                .findById(cancelParticipationRequest.getRequestId())
+                .orElseThrow(() -> {
+                    log.info("{}: attempt to find participationRequest with id: {}",
+                            cancelParticipationRequest, cancelParticipationRequest.getRequestId());
+                    return new NotFoundException("The required object was not found.",
+                            "ParticipationRequest with id=" + cancelParticipationRequest.getRequestId() +
+                                    " was not found");
+                });
+        //feignExistenceValidator.validateUserExists(cancelParticipationRequest.getUserId());
+        if (!request.getRequesterId().equals(cancelParticipationRequest.getUserId())) {
+            log.info("{}: attempt to cancel participationRequest by not an owner", className);
+            throw new ConflictException("Request can be cancelled only by an owner",
+                    "User with id=" + cancelParticipationRequest.getUserId() +
+                            " is not an owner of request with id=" + cancelParticipationRequest.getRequestId());
+        }
+
+        ParticipationRequestDto result = participationRequestMapper.toDto(
+                participationRequestRepository.findById(cancelParticipationRequest.getRequestId()).get());
+        result.setStatus(ParticipationRequestStatus.CANCELED);
+        participationRequestRepository.deleteById(cancelParticipationRequest.getRequestId());
+
+        log.info("{}: result of cancel(): {}, which has been deleted", className, result);
+        return result;
     }
 
     private ParticipationRequest mapEntity(NewParticipationRequest newParticipationRequest) {
-//        Long userId = newParticipationRequest.getUserId();
-//        Long eventId = newParticipationRequest.getEventId();
-//
-//        ParticipationRequest entity = ParticipationRequest.builder()
-//                .created(LocalDateTime.now())
-//                .requester(feignExistenceValidator.getUserById(userId))
-//                .event(feignExistenceValidator.getEventById(eventId))
-//                .status(ParticipationRequestStatus.PENDING)
-//                .build();
-//
-//        log.trace("{}: result of mapEntity(): {}", className, entity);
-//        return entity;
-        return null;
+        Long userId = newParticipationRequest.getUserId();
+        Long eventId = newParticipationRequest.getEventId();
+
+        ParticipationRequest entity = ParticipationRequest.builder()
+                .created(LocalDateTime.now())
+                .requesterId(userId)
+                .eventId(eventId)
+                .status(ParticipationRequestStatus.PENDING)
+                .build();
+
+        log.trace("{}: result of mapEntity(): {}", className, entity);
+        return entity;
     }
 
     @Override
