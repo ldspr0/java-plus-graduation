@@ -5,68 +5,68 @@ spring:
         locator:
           enabled: false
       routes:
-        - id: main-service-admin-users
-          uri: lb://main-service
+        - id: event-service-admin-users
+          uri: lb://event-service
           predicates:
             - Path=/admin/users, /admin/users/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-admin-categories
-          uri: lb://main-service
+        - id: event-service-admin-categories
+          uri: lb://event-service
           predicates:
             - Path=/admin/categories, /admin/categories/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-admin-compilations
-          uri: lb://main-service
+        - id: event-service-admin-compilations
+          uri: lb://event-service
           predicates:
             - Path=/admin/compilations, /admin/compilations/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-admin-events
-          uri: lb://main-service
+        - id: event-service-admin-events
+          uri: lb://event-service
           predicates:
             - Path=/admin/events, /admin/events/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-public-categories
-          uri: lb://main-service
+        - id: event-service-public-categories
+          uri: lb://event-service
           predicates:
             - Path=/categories, /categories/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-public-compilations
-          uri: lb://main-service
+        - id: event-service-public-compilations
+          uri: lb://event-service
           predicates:
             - Path=/compilations, /compilations/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-public-events
-          uri: lb://main-service
+        - id: event-service-public-events
+          uri: lb://event-service
           predicates:
             - Path=/events, /events/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-private-events
-          uri: lb://main-service
+        - id: event-service-private-events
+          uri: lb://event-service
           predicates:
             - Path=/users/*/events, /users/*/events/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
-        - id: main-service-private-requests
-          uri: lb://main-service
+        - id: event-service-private-requests
+          uri: lb://event-service
           predicates:
             - Path=/users/*/requests, /users/*/requests/**
           filters:
-            - CircuitBreaker=mainServiceCircuitBreaker
+            - CircuitBreaker=eventServiceCircuitBreaker
 
         - id: stats-server-hit
           uri: lb://stats-server
@@ -88,7 +88,7 @@ server:
 resilience4j:
   circuitbreaker:
     instances:
-      mainServiceCircuitBreaker:
+      eventServiceCircuitBreaker:
         register-health-indicator: true
         sliding-window-size: 10
         minimum-number-of-calls: 5
