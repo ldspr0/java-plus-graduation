@@ -58,7 +58,7 @@ public class Event {
     @Column(name = "title", length = 120)
     private String title;
 
-    @JoinColumn(name = "initiator_id")
+    @Column(name = "initiator_id")
     private Long initiatorId;
 
     @Convert(converter = EventStateConverter.class)
