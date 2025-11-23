@@ -22,7 +22,7 @@ public class EventShortDto {
     private LocalDateTime eventDate;
 
     private long id;
-    private UserShortDto initiator;
+    private Long initiatorId;
     private boolean paid;
     private String title;
     private Long views;
