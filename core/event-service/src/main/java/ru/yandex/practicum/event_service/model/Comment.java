@@ -41,6 +41,6 @@ public class Comment {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @JoinColumn(name = "author_id")
+    @Column(name = "author_id")
     private Long authorId;
 }

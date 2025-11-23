@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
 import ru.yandex.practicum.request_service.model.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 
@@ -22,15 +21,6 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
                                                    ParticipationRequestStatus status);
 
     int countByEventId(Long eventId);
-
-//    @Query("""
-//                SELECT new ru.yandex.practicum.core_api.model.event.dto.EventRequestCount(r.event.id, COUNT(r))
-//                    FROM ParticipationRequest r
-//                    WHERE r.event.id IN :eventIds
-//                    AND r.status = 'confirmed'
-//                    GROUP BY r.event.id
-//            """)
-//    List<EventRequestCount> countGroupByEventId(@Param("eventIds") List<Long> eventIds);
 
     List<ParticipationRequest> findAllByEventId(Long eventId);
 

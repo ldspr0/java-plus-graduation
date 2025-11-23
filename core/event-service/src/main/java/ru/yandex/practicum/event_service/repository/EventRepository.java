@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.yandex.practicum.event_service.model.Event;
 import ru.yandex.practicum.core_api.model.event.EventState;
-//import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,4 +61,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                @Param("rangeStart") LocalDateTime rangeStart,
                                @Param("rangeEnd") LocalDateTime rangeEnd,
                                Pageable pageable);
+
+    Event getEventById(Long eventId);
 }

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.core_api.interfaces;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.dto.*;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -69,9 +68,4 @@ public interface EventInterface {
 
     @GetMapping("/events/{eventId}/internal")
     EventFullDto getEventByIdInternal(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
-
-    // Event participation requests
-
-
-
 }

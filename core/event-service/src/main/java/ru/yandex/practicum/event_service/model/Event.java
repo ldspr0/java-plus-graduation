@@ -11,7 +11,6 @@ import ru.yandex.practicum.core_api.model.event.EventStateConverter;
 import ru.yandex.practicum.core_api.model.event.Location;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

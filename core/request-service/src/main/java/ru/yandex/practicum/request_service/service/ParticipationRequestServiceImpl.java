@@ -134,7 +134,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                             "ParticipationRequest with id=" + cancelParticipationRequest.getRequestId() +
                                     " was not found");
                 });
-        //feignExistenceValidator.validateUserExists(cancelParticipationRequest.getUserId());
         if (!request.getRequesterId().equals(cancelParticipationRequest.getUserId())) {
             log.info("{}: attempt to cancel participationRequest by not an owner", className);
             throw new ConflictException("Request can be cancelled only by an owner",
@@ -260,7 +259,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
 
         List<ParticipationRequest> requestsByEventId = participationRequestRepository.findAllByEventId(eventId);
-        //List<ParticipationRequest> requestsByEventId = participationRequestRepository.findParticipationRequestsByEventId(userId, eventId);
         return requestsByEventId.stream().map(participationRequestMapper::toDto).toList();
     }
 }

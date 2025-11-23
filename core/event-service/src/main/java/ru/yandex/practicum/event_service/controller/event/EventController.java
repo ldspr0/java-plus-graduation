@@ -19,7 +19,6 @@ import ru.yandex.practicum.core_api.model.event.AdminEventFilter;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.core_api.model.event.dto.*;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 import ru.yandex.practicum.core_api.util.StatSaver;
 import ru.yandex.practicum.event_service.service.event.EventAdminService;
 import ru.yandex.practicum.event_service.service.event.EventService;
@@ -143,8 +142,4 @@ public class EventController implements EventInterface {
         log.trace("getEventByIdInternal() call with eventId: {}", eventId);
         return eventsService.getEventByIdInternal(eventId);
     }
-
-
-
-
 }

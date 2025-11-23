@@ -13,7 +13,6 @@ import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.RequestServiceClient;
 import ru.yandex.practicum.event_service.mapper.EventMapper;
-//import ru.yandex.practicum.core_api.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.event_service.model.Category;
 import ru.yandex.practicum.event_service.model.Event;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
@@ -26,8 +25,6 @@ import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserAction;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
-//import ru.yandex.practicum.core_api.model.request.ParticipationRequest;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 import ru.yandex.practicum.event_service.repository.CategoryRepository;
 import ru.yandex.practicum.event_service.repository.EventRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
@@ -50,14 +47,11 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
-    //    private final ParticipationRequestMapper requestMapper;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
     @Override
     public EventFullDto createEvent(long userId, NewEventDto eventDto) {
-        //User user = findUserByIdOrElseThrow(userId);
-
         long categoryId = eventDto.getCategory();
         Category category = findCategoryByIdOrElseThrow(categoryId);
 
@@ -148,7 +142,6 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getEventsByUser(long userId, int from, int count) {
-//        User user = findUserByIdOrElseThrow(userId);
         Pageable pageable = PageRequest.of(from, count, Sort.by("createdOn").ascending());
         List<Event> events = eventRepository.findEventsByUserId(userId, pageable).getContent();
         if (events.isEmpty()) {
@@ -259,7 +252,6 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
 
     private Event getEventIfInitiatedByUser(long userId, long eventId) {
-//        feignExistenceValidator.validateUserExists(userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("The required object was not found.", "Event with id=" + eventId + " was not found"));
 
@@ -271,11 +263,6 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         log.info("{}: result of getEventIfInitiatedByUser(): {}", className, event);
         return event;
     }
-
-//    private User findUserByIdOrElseThrow(long userId) {
-//        return feignExistenceValidator.getUserById(userId);
-//
-//    }
 
     private Category findCategoryByIdOrElseThrow(long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(() -> {
@@ -322,7 +309,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
                 .end(end)
                 .eventIds(eventIds).unique(true).build();
         Map<Long, Long> viewStats = getEventViews(params);
-        Map<Long, Integer> confirmedRequests = new HashMap<>();// getConfirmedRequests(eventIds);
+        Map<Long, Integer> confirmedRequests = new HashMap<>();
         EventStatistics result = new EventStatistics(viewStats, confirmedRequests);
         log.info("{}: result of getEventStatistics(): {}", className, result);
         return result;
