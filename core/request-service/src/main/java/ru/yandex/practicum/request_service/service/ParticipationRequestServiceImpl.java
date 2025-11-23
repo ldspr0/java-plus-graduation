@@ -258,7 +258,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId) {
 
-        List<ParticipationRequest> requestsByEventId = participationRequestRepository.findParticipationRequestsByEventId(userId, eventId);
+
+        List<ParticipationRequest> requestsByEventId = participationRequestRepository.findAllByEventId(eventId);
+        //List<ParticipationRequest> requestsByEventId = participationRequestRepository.findParticipationRequestsByEventId(userId, eventId);
         return requestsByEventId.stream().map(participationRequestMapper::toDto).toList();
     }
 }
