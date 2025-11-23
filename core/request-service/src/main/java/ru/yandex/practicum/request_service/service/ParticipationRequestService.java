@@ -13,8 +13,6 @@ public interface ParticipationRequestService {
 
     ParticipationRequestDto create(NewParticipationRequest newParticipationRequest);
 
-    ParticipationRequestDto createInitial(NewParticipationRequest newParticipationRequest);
-
     ParticipationRequestDto cancel(CancelParticipationRequest cancelParticipationRequest);
 
     List<ParticipationRequestDto> getEventParticipationRequestsByUser(long userId, long eventId);

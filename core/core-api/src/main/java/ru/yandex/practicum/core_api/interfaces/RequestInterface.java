@@ -70,14 +70,4 @@ public interface RequestInterface {
                                                                       @PositiveOrZero
                                                                       @NotNull
                                                                       Long eventId);
-
-    @PostMapping("/users/{userId}/requests/initial")
-    ParticipationRequestDto createInitial(@PathVariable("userId")
-                                   @NotNull(message = "must not be null")
-                                   @PositiveOrZero(message = "must be positive or zero")
-                                   Long userId,
-                                   @RequestParam("eventId")
-                                   @NotNull(message = "must not be null")
-                                   @PositiveOrZero(message = "must be positive or zero")
-                                   Long eventId);
 }
