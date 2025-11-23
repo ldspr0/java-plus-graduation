@@ -2,6 +2,8 @@ package ru.yandex.practicum.event_service.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class EventServiceImpl implements ExistenceValidator<Event>, EventService {
     private final String className = this.getClass().getSimpleName();
@@ -51,13 +52,24 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
 //    private final ParticipationRequestMapper requestMapper;
-    private final RequestServiceClient requestServiceClient;
+
+    @Lazy
+    @Autowired
+    private RequestServiceClient requestServiceClient;
+
+    public EventServiceImpl(EventRepository eventRepository,
+                            CategoryRepository categoryRepository,
+                            EventMapper eventMapper,
+                            StatsGetter statsGetter) {
+        this.eventRepository = eventRepository;
+        this.categoryRepository = categoryRepository;
+        this.eventMapper = eventMapper;
+        this.statsGetter = statsGetter;
+    }
 
     @Transactional
     @Override
     public EventFullDto createEvent(long userId, NewEventDto eventDto) {
-        //User user = findUserByIdOrElseThrow(userId);
-
         long categoryId = eventDto.getCategory();
         Category category = findCategoryByIdOrElseThrow(categoryId);
 
@@ -66,9 +78,11 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         event.setCategory(category);
         event.setState(EventState.PENDING);
         Event eventSaved = eventRepository.save(event);
+        eventRepository.flush();
         EventFullDto eventFullDto = eventMapper.toFullDto(eventSaved);
         eventFullDto.setViews(0L);
 
+        requestServiceClient.createInitial(userId, eventSaved.getId());
         log.info("{}: result of createEvent(): {}", className, eventFullDto);
         return eventFullDto;
     }

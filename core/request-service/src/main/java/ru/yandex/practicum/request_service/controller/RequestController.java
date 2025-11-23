@@ -104,4 +104,23 @@ public class RequestController implements RequestInterface {
                 className, userId, eventId);
         return service.getEventParticipationRequestsByUser(userId, eventId);
     }
+
+    @Override
+    @PostMapping("/users/{userId}/requests/initial")
+    public ParticipationRequestDto createInitial(@PathVariable
+                                          @NotNull(message = "must not be null")
+                                          @PositiveOrZero(message = "must be positive or zero")
+                                          Long userId,
+                                          @RequestParam
+                                          @NotNull(message = "must not be null")
+                                          @PositiveOrZero(message = "must be positive or zero")
+                                          Long eventId) {
+        log.trace("{}: create() call with userId: {}, eventId: {}", className, userId, eventId);
+
+        NewParticipationRequest newParticipationRequest = NewParticipationRequest.builder()
+                .userId(userId)
+                .eventId(eventId)
+                .build();
+        return service.createInitial(newParticipationRequest);
+    }
 }
