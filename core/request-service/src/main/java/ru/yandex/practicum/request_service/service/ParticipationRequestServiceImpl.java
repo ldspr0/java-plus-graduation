@@ -124,6 +124,18 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     @Transactional
+    public ParticipationRequestDto createInitial(NewParticipationRequest newParticipationRequest) {
+        ParticipationRequest request = mapEntity(newParticipationRequest);
+
+        request.setStatus(ParticipationRequestStatus.CONFIRMED);
+
+        ParticipationRequestDto result = getDto(participationRequestRepository.save(request));
+        log.info("{}: result of create():: {}", className, result);
+        return result;
+    }
+
+    @Override
+    @Transactional
     public ParticipationRequestDto cancel(CancelParticipationRequest cancelParticipationRequest) {
         ParticipationRequest request = participationRequestRepository
                 .findById(cancelParticipationRequest.getRequestId())
