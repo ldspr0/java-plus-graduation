@@ -1,8 +1,7 @@
 package ru.yandex.practicum.event_service.service.event;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class EventServiceImpl implements ExistenceValidator<Event>, EventService {
     private final String className = this.getClass().getSimpleName();
@@ -43,20 +43,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
-
-    @Lazy
-    @Autowired
-    private RequestServiceClient requestServiceClient;
-
-    public EventServiceImpl(EventRepository eventRepository,
-                            CategoryRepository categoryRepository,
-                            EventMapper eventMapper,
-                            StatsGetter statsGetter) {
-        this.eventRepository = eventRepository;
-        this.categoryRepository = categoryRepository;
-        this.eventMapper = eventMapper;
-        this.statsGetter = statsGetter;
-    }
+    private final RequestServiceClient requestServiceClient;
 
     @Transactional
     @Override
