@@ -77,6 +77,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     "Event with id=" + eventId + " was not found");
         }
 
+        if (event.getInitiator().getId().equals(requesterId)) {
+            log.info("{}: attempt to create participationRequest by an event initiator with requesterId: {}, eventId: {}, " +
+                    "initiatorId: {}", className, requesterId, eventId, event.getInitiator().getId());
+            throw new ConflictException("Initiator can't create participation request.", "requesterId: "
+                    + requesterId + " equals to initiatorId: " + event.getInitiator().getId());
+        }
+
         try {
             user = userServiceClient.getUserById(requesterId);
         } catch (FeignException.NotFound e) {
