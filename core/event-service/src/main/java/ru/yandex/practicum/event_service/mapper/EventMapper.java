@@ -14,10 +14,12 @@ import ru.yandex.practicum.event_service.model.Event;
 
 @Mapper(componentModel = "spring", uses = {CategoryMapper.class, CommentMapper.class})
 public interface EventMapper {
+    @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
     @Mapping(target = "views", ignore = true)
     EventFullDto toFullDto(Event event);
 
+    @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
     @Mapping(target = "views", ignore = true)
     EventShortDto toShortDto(Event event);
