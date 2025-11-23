@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.core_api.interfaces.RequestInterface;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
@@ -103,5 +104,15 @@ public class RequestController implements RequestInterface {
         log.trace("{}: getEventParticipationRequestsByUser() call with userId: {}, eventId: {}",
                 className, userId, eventId);
         return service.getEventParticipationRequestsByUser(userId, eventId);
+    }
+
+    @Override
+    @GetMapping("/requests/count")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventRequestCount> countGroupByEventId(@RequestParam
+                                                       @NotNull(message = "must not be null")
+                                                       List<Long> eventIds) {
+        log.trace("{}: countGroupByEventId() call with eventIds: {}", className, eventIds);
+        return service.countGroupByEventId(eventIds);
     }
 }

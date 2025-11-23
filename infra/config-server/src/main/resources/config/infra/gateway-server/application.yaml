@@ -19,6 +19,13 @@ spring:
           filters:
             - CircuitBreaker=requestServiceCircuitBreaker
 
+        - id: request-service-count-requests
+          uri: lb://request-service
+          predicates:
+            - Path=/requests/count
+          filters:
+            - CircuitBreaker=requestServiceCircuitBreaker
+
         - id: request-service-participation-check
           uri: lb://request-service
           predicates:

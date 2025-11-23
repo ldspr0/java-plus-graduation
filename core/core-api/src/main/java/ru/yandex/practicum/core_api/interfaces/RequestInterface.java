@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
 import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
@@ -70,4 +71,11 @@ public interface RequestInterface {
                                                                       @PositiveOrZero
                                                                       @NotNull
                                                                       Long eventId);
+
+    @GetMapping("/requests/count")
+    @ResponseStatus(HttpStatus.OK)
+    List<EventRequestCount> countGroupByEventId(@RequestParam("eventIds")
+                                                @NotNull(message = "must not be null")
+                                                List<Long> eventIds);
+
 }

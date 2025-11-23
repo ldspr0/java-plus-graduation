@@ -10,10 +10,7 @@ import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.EventServiceClient;
 import ru.yandex.practicum.core_api.feign.UserServiceClient;
-import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateRequest;
-import ru.yandex.practicum.core_api.model.event.dto.EventRequestStatusUpdateResult;
-import ru.yandex.practicum.core_api.model.event.dto.StatusUpdateRequest;
+import ru.yandex.practicum.core_api.model.event.dto.*;
 import ru.yandex.practicum.core_api.model.user.UserDto;
 import ru.yandex.practicum.request_service.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.core_api.model.request.CancelParticipationRequest;
@@ -260,5 +257,20 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         List<ParticipationRequest> requestsByEventId = participationRequestRepository.findAllByEventId(eventId);
         return requestsByEventId.stream().map(participationRequestMapper::toDto).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EventRequestCount> countGroupByEventId(List<Long> eventIds) {
+        log.trace("{}: countGroupByEventId() call with eventIds: {}", className, eventIds);
+
+        if (eventIds == null || eventIds.isEmpty()) {
+            log.info("{}: empty eventIds list provided", className);
+            return List.of();
+        }
+
+        List<EventRequestCount> result = participationRequestRepository.countConfirmedRequestsByEventIdIn(eventIds);
+        log.info("{}: result of countGroupByEventId(): {}", className, result);
+        return result;
     }
 }

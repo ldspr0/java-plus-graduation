@@ -12,6 +12,7 @@ import ru.yandex.practicum.core_api.exception.BadRequestException;
 import ru.yandex.practicum.core_api.exception.ConflictException;
 import ru.yandex.practicum.core_api.exception.NotFoundException;
 import ru.yandex.practicum.core_api.feign.RequestServiceClient;
+import ru.yandex.practicum.core_api.model.event.dto.*;
 import ru.yandex.practicum.event_service.mapper.EventMapper;
 import ru.yandex.practicum.event_service.model.Category;
 import ru.yandex.practicum.event_service.model.Event;
@@ -19,12 +20,6 @@ import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.EventState;
 import ru.yandex.practicum.core_api.model.event.EventStatistics;
 import ru.yandex.practicum.core_api.model.event.PublicEventParam;
-import ru.yandex.practicum.core_api.model.event.dto.EventFullDto;
-import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
-import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
-import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
-import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserAction;
-import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
 import ru.yandex.practicum.event_service.repository.CategoryRepository;
 import ru.yandex.practicum.event_service.repository.EventRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
@@ -36,6 +31,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -309,9 +305,21 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
                 .end(end)
                 .eventIds(eventIds).unique(true).build();
         Map<Long, Long> viewStats = getEventViews(params);
-        Map<Long, Integer> confirmedRequests = new HashMap<>();
+        Map<Long, Integer> confirmedRequests = getConfirmedRequests(eventIds);
         EventStatistics result = new EventStatistics(viewStats, confirmedRequests);
         log.info("{}: result of getEventStatistics(): {}", className, result);
+        return result;
+    }
+
+    private Map<Long, Integer> getConfirmedRequests(List<Long> eventIds) {
+        List<EventRequestCount> confirmedRequests = requestServiceClient.countGroupByEventId(eventIds);
+        Map<Long, Integer> result = confirmedRequests.stream().collect(
+                Collectors.toMap(
+                        EventRequestCount::eventId,
+                        r -> r.count().intValue()
+                )
+        );
+        log.info("{}: result of getConfirmedRequests: {}", className, result);
         return result;
     }
 

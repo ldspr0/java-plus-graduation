@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import ru.yandex.practicum.core_api.model.event.dto.EventRequestCount;
 import ru.yandex.practicum.request_service.model.ParticipationRequest;
 import ru.yandex.practicum.core_api.model.request.ParticipationRequestStatus;
 
@@ -37,5 +38,17 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
     @Query("SELECT pr FROM ParticipationRequest pr WHERE pr.eventId = :eventId AND pr.requesterId = :userId")
     List<ParticipationRequest> findParticipationRequestsByEventId(@Param("userId") long userId,
                                                                   @Param("eventId") long eventId);
+
+    @Query("""
+        SELECT new ru.yandex.practicum.core_api.model.event.dto.EventRequestCount(
+            pr.eventId, 
+            COUNT(pr.id)
+        ) 
+        FROM ParticipationRequest pr 
+        WHERE pr.eventId IN :eventIds 
+        AND pr.status = 'CONFIRMED' 
+        GROUP BY pr.eventId
+    """)
+    List<EventRequestCount> countConfirmedRequestsByEventIdIn(@Param("eventIds") List<Long> eventIds);
 
 }
