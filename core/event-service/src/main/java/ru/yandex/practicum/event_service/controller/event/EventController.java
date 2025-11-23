@@ -137,6 +137,13 @@ public class EventController implements EventInterface {
         return eventsService.getPublicEventById(eventId);
     }
 
+    @Override
+    @GetMapping("/events/{eventId}/internal")
+    public EventFullDto getEventByIdInternal(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId){
+        log.trace("getEventByIdInternal() call with eventId: {}", eventId);
+        return eventsService.getEventByIdInternal(eventId);
+    }
+
 
 
 

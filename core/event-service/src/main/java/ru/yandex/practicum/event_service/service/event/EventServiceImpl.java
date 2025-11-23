@@ -50,7 +50,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final StatsGetter statsGetter;
-//    private final ParticipationRequestMapper requestMapper;
+    //    private final ParticipationRequestMapper requestMapper;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
@@ -164,8 +164,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         return result;
     }
 
-
-
+    @Override
     @Transactional(readOnly = true)
     public EventFullDto getPublicEventById(long eventId) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
@@ -180,6 +179,20 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         EventStatistics stats = getEventStatistics(events, startStats, endStats);
         EventFullDto result = eventMapper.toFullDtoWithStats(event, stats);
         log.info("{}: result of getPublicEventById(): {}", className, result);
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EventFullDto getEventByIdInternal(long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> {
+                    log.info("{}: attempt to find event with id: {}", className, eventId);
+                    return new NotFoundException("The required object was not found.",
+                            "Event with id=" + eventId + " was not found");
+                });
+        EventFullDto result = eventMapper.toFullDto(event);
+        log.info("{}: result of getEventByIdInternal(): {}", className, result);
         return result;
     }
 
@@ -226,6 +239,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         log.info("{}: result of getPublicEvents(): {}", className, result);
         return result;
     }
+
 
     @Override
     public Map<Long, Long> getEventViews(EventViewsParameters params) {

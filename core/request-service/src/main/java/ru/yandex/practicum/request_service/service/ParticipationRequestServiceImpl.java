@@ -71,7 +71,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         UserDto user;
 
         try {
-            event = eventServiceClient.getEventById(eventId);
+            event = eventServiceClient.getEventByIdInternal(eventId);
         } catch (FeignException.NotFound e) {
             throw new ConflictException("Event not found",
                     "Event with id=" + eventId + " was not found");
@@ -195,7 +195,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Transactional
     public EventRequestStatusUpdateResult updateEventRequestStatus(long userId, long eventId,
                                                                    EventRequestStatusUpdateRequest updateRequest) {
-        EventFullDto event = eventServiceClient.getEventById(eventId);
+        EventFullDto event = eventServiceClient.getEventByIdInternal(eventId);
         List<ParticipationRequest> requestsByEventId = participationRequestRepository.findAllById(updateRequest.getRequestIds());
 
         if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {

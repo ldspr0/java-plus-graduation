@@ -67,6 +67,9 @@ public interface EventInterface {
     @ResponseStatus(HttpStatus.OK)
     EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
 
+    @GetMapping("/events/{eventId}/internal")
+    EventFullDto getEventByIdInternal(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
+
     // Event participation requests
 
 
