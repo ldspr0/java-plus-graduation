@@ -1,17 +1,16 @@
 syntax = "proto3";
 
-package telemetry.service.collector;
+package ru.yandex.practicum.ewm.stats.proto;
 
-option java_multiple_files = true;
-option java_package = "ru.yandex.practicum.grpc.telemetry.collector";
+import "messages/recommendations.proto";
 
-import "telemetry/messages/sensor_event.proto";
-import "telemetry/messages/hub_event.proto";
+service RecommendationsController {
+  rpc GetRecommendationsForUser(UserPredictionsRequestProto)
+      returns (stream RecommendedEventProto);
 
-service CollectorController {
-  rpc CollectSensorEvent (telemetry.messages.event.SensorEventProto)
-      returns (telemetry.messages.event.CollectorResponse);
+  rpc GetSimilarEvents(SimilarEventsRequestProto)
+      returns (stream RecommendedEventProto);
 
-  rpc CollectHubEvent (telemetry.messages.event.HubEventProto)
-      returns (telemetry.messages.event.CollectorResponse);
+  rpc GetInteractionsCount(InteractionsCountRequestProto)
+      returns (stream RecommendedEventProto);
 }

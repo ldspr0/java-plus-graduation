@@ -1,17 +1,10 @@
 syntax = "proto3";
 
-package ru.practicum.ewm.stats.proto;
+package ru.yandex.practicum.ewm.stats.proto;
 
-import "messages/recommendations_messages.proto";
 import "google/protobuf/empty.proto";
+import "messages/user_action.proto";
 
-service RecommendationsController {
-  rpc GetRecommendationsForUser(UserPredictionsRequestProto)
-      returns (stream RecommendedEventProto);
-
-  rpc GetSimilarEvents(SimilarEventsRequestProto)
-      returns (stream RecommendedEventProto);
-
-  rpc GetInteractionsCount(InteractionsCountRequestProto)
-      returns (stream RecommendedEventProto);
+service UserActionController {
+  rpc CollectUserAction(UserActionProto) returns (google.protobuf.Empty);
 }

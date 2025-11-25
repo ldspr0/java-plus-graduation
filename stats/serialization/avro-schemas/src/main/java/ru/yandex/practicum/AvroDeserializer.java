@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.yandex.practicum;
 
 import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DecoderFactory;
