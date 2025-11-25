@@ -19,7 +19,6 @@ import ru.yandex.practicum.core_api.model.event.AdminEventFilter;
 import ru.yandex.practicum.core_api.model.event.EventPublicSort;
 import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.core_api.model.event.dto.*;
-import ru.yandex.practicum.core_api.util.StatSaver;
 import ru.yandex.practicum.event_service.service.event.EventAdminService;
 import ru.yandex.practicum.event_service.service.event.EventService;
 
@@ -35,7 +34,6 @@ public class EventController implements EventInterface {
     private final String className = this.getClass().getSimpleName();
     private final EventAdminService service;
     private final EventService eventsService;
-    private final StatSaver statSaver;
     @Autowired
     private HttpServletRequest request;
 
@@ -110,7 +108,7 @@ public class EventController implements EventInterface {
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size,
                                          HttpServletRequest request) {
-        statSaver.save(request, className);
+        //statSaver.save(request, className);
 
         PublicEventParam publicEventParam = new PublicEventParam();
         publicEventParam.setText(Objects.requireNonNullElse(text, ""));
@@ -131,7 +129,7 @@ public class EventController implements EventInterface {
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId) {
-        statSaver.save(request, className);
+        //statSaver.save(request, className);
         log.trace("{}: getEventByIdForUser() call with eventId: {}", className, eventId);
         return eventsService.getPublicEventById(eventId);
     }

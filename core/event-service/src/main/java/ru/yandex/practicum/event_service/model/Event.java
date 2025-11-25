@@ -60,6 +60,8 @@ public class Event {
     @Column(name = "initiator_id")
     private Long initiatorId;
 
+    private Double rating;
+
     @Convert(converter = EventStateConverter.class)
     private EventState state;
 }

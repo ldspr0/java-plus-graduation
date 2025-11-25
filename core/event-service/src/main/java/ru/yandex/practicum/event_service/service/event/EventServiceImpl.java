@@ -23,8 +23,7 @@ import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.event_service.repository.CategoryRepository;
 import ru.yandex.practicum.event_service.repository.EventRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
-import ru.yandex.practicum.core_api.util.StatsGetter;
-import ru.yandex.practicum.stats.dto.ViewStats;
+//import ru.yandex.practicum.stats.client.AnalyzerClient;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -42,7 +41,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
-    private final StatsGetter statsGetter;
+    //private final AnalyzerClient analyzerClient;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
@@ -57,7 +56,6 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         event.setState(EventState.PENDING);
         Event eventSaved = eventRepository.save(event);
         EventFullDto eventFullDto = eventMapper.toFullDto(eventSaved);
-        eventFullDto.setViews(0L);
 
         log.info("{}: result of createEvent(): {}", className, eventFullDto);
         return eventFullDto;
@@ -232,18 +230,19 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
     @Override
     public Map<Long, Long> getEventViews(EventViewsParameters params) {
-        List<ViewStats> stats = statsGetter.getEventViewStats(params);
-        Map<Long, Long> views = new HashMap<>();
-        if (stats != null) {
-            for (ViewStats stat : stats) {
-                Long eventId = extractId(stat.getUri());
-                if (eventId != null) {
-                    views.put(eventId, stat.getHits());
-                }
-            }
-        }
-        log.info("{}: result of getEventViews: {}", className, views);
-        return views;
+//        List<ViewStats> stats = statsGetter.getEventViewStats(params);
+//        Map<Long, Long> views = new HashMap<>();
+//        if (stats != null) {
+//            for (ViewStats stat : stats) {
+//                Long eventId = extractId(stat.getUri());
+//                if (eventId != null) {
+//                    views.put(eventId, stat.getHits());
+//                }
+//            }
+//        }
+//        log.info("{}: result of getEventViews: {}", className, views);
+//        return views;
+        return new HashMap<>();
     }
 
 

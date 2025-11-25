@@ -8,7 +8,6 @@ import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

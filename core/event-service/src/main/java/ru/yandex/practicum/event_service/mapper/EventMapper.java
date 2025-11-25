@@ -16,12 +16,10 @@ import ru.yandex.practicum.event_service.model.Event;
 public interface EventMapper {
     @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
-    @Mapping(target = "views", ignore = true)
     EventFullDto toFullDto(Event event);
 
     @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
-    @Mapping(target = "views", ignore = true)
     EventShortDto toShortDto(Event event);
 
     @Mapping(target = "id", ignore = true)
@@ -43,14 +41,12 @@ public interface EventMapper {
 
     default EventFullDto toFullDtoWithStats(Event event, EventStatistics stats) {
         EventFullDto dto = toFullDto(event);
-        dto.setViews(stats.getViews(event.getId()));
         dto.setConfirmedRequests(stats.getConfirmedRequests(event.getId()));
         return dto;
     }
 
     default EventShortDto toShortDtoWithStats(Event event, EventStatistics stats) {
         EventShortDto dto = toShortDto(event);
-        dto.setViews(stats.getViews(event.getId()));
         dto.setConfirmedRequests(stats.getConfirmedRequests(event.getId()));
         return dto;
     }
