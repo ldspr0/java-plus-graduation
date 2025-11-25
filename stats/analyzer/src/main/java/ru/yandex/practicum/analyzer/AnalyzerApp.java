@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class AnalyzerApp {
     public static void main(String[] args) {
-        SpringApplication.run(AnalyzerApplication.class, args);
+        SpringApplication.run(AnalyzerApp.class, args);
     }
 
 }
