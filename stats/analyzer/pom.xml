@@ -18,7 +18,7 @@
         <avro-schemas.version>0.0.1-SNAPSHOT</avro-schemas.version>
         <proto-schemas.version>0.0.1-SNAPSHOT</proto-schemas.version>
         <lombok.version>1.18.30</lombok.version>
-        <spring-kafka.version>3.1.5</spring-kafka.version>
+        <spring-kafka.version>3.1.7</spring-kafka.version>
     </properties>
 
     <dependencies>
