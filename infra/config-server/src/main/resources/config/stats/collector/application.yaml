@@ -3,7 +3,7 @@ spring:
     bootstrap-servers: kafka:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: ru.practicum.AvroSerializer
+      value-serializer: ru.yandex.practicum.AvroSerializer
 
 collector:
   kafka:
