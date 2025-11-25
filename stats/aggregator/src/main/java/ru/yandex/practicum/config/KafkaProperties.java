@@ -19,15 +19,15 @@ public class KafkaProperties {
     public static class Consumer {
         private String groupId;
         private String topic;
-        private String keyDeserializer;
-        private String valueDeserializer;
+        private Class<?> keyDeserializer;
+        private Class<?> valueDeserializer;
     }
 
     @Getter
     @Setter
     public static class Producer {
         private String topic;
-        private String keySerializer;
-        private String valueSerializer;
+        private Class<?> keySerializer;
+        private Class<?> valueSerializer;
     }
 }
