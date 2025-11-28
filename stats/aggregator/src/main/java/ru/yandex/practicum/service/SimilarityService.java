@@ -10,16 +10,16 @@ import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Service
 public class SimilarityService {
 
     private final Map<Long, Map<Long, Double>> weights = new HashMap<>();
-
     private final Map<Long, Double> eventWeightsSum = new HashMap<>();
-
     private final MinWeightsMatrix minWeightsMatrix = new MinWeightsMatrix();
 
     private final KafkaTemplate<String, EventSimilarityAvro> kafkaTemplate;
@@ -34,88 +34,128 @@ public class SimilarityService {
     public void processUserAction(UserActionAvro action) {
         long userId = action.getUserId();
         long eventId = action.getEventId();
-        double newWeight = convertActionType(action.getActionType()); // ← double
+        double newWeight = convertActionType(action.getActionType());
         Instant timestamp = action.getTimestamp();
 
         log.info("PROCESSING ACTION: userId={}, eventId={}, newWeight={}", userId, eventId, newWeight);
-
         Map<Long, Double> userMap = weights.computeIfAbsent(eventId, e -> new HashMap<>());
         double oldWeight = userMap.getOrDefault(userId, 0.0);
-
-        log.info("OLD WEIGHT: {}, NEW WEIGHT: {}", oldWeight, newWeight);
-
         if (newWeight <= oldWeight) {
             log.debug("Update is not required for: userId={}, eventId={}, weight={} <= oldWeight={}",
                     userId, eventId, newWeight, oldWeight);
             return;
         }
+        log.info("OLD WEIGHT: {}, NEW WEIGHT: {}", oldWeight, newWeight);
 
         log.info("PROCEEDING WITH CALCULATION...");
 
+        // Обновляем вес пользователя
         userMap.put(userId, newWeight);
 
+        // Обновляем сумму весов мероприятия
+        updateEventWeightSum(eventId, oldWeight, newWeight);
+
+        updateMinWeightMatrix(eventId, userId, oldWeight, newWeight);
+
+        // Пересчитываем и отправляем обновления только для нужных пар
+        recalculateAndSendSimilarities(eventId, timestamp, oldWeight, userId);
+
+
+    }
+
+    private void updateMinWeightMatrix(long eventId, long userId, double oldWeight, double newWeight) {
+        for (Long eachEvent : weights.keySet()) {
+            if (eachEvent == eventId) {
+                continue;
+            }
+            if (weights.get(eachEvent).get(userId) == null || weights.get(eachEvent).get(userId) == 0.0) {
+                continue;
+            }
+            double otherEventWeight = weights.get(eachEvent).get(userId);
+            if (otherEventWeight <= oldWeight) {
+                continue;
+            }
+            log.info("otherEventWeight event: {} ", otherEventWeight);
+            double oldMin = minWeightsMatrix.get(eventId, eachEvent);
+            log.info("oldMin event: {} ", oldMin);
+            double diff = Math.min(otherEventWeight, newWeight) - oldWeight;
+            log.info("diff event: {} ", diff);
+            minWeightsMatrix.put(eventId, eachEvent, oldMin + diff);
+
+        }
+        log.info("Updated min weight matrix for event: {} ", eventId);
+    }
+
+    private void updateEventWeightSum(long eventId, double oldWeight, double newWeight) {
         double oldSum = eventWeightsSum.getOrDefault(eventId, 0.0);
         double diff = newWeight - oldWeight;
         double updatedSum = oldSum + diff;
         eventWeightsSum.put(eventId, updatedSum);
-
-        updateSMinForAllPairs(eventId, userId, oldWeight, newWeight);
-
-        weights.keySet().stream()
-                .filter(otherEventId -> !otherEventId.equals(eventId))
-                .filter(otherEventId -> hasCommonUsers(eventId, otherEventId))
-                .forEach(otherEventId -> updatePairSimilarity(eventId, otherEventId, timestamp));
+        log.info("Updated weight sum for event {}: {} -> {}", eventId, oldSum, updatedSum);
     }
 
-    private void updateSMinForAllPairs(long updatedEventId, long userId, double oldWeight, double newWeight) {
+    private void recalculateAndSendSimilarities(long eventId, Instant timestamp, double oldWeight, long userId) {
+        Set<String> sentPairs = new HashSet<>();
+
+        // Для каждой пары пересчитываем S_min и similarity
         for (Long otherEventId : weights.keySet()) {
-            if (otherEventId.equals(updatedEventId)) {
+            if (otherEventId == eventId) {
+                continue;
+            }
+            if (weights.get(otherEventId).get(userId) == null || weights.get(otherEventId).get(userId) == 0.0) {
+                continue;
+            }
+            double otherEventWeight = weights.get(otherEventId).get(userId);
+            if (otherEventWeight <= oldWeight) {
                 continue;
             }
 
-            Map<Long, Double> otherUserMap = weights.get(otherEventId);
-            if (otherUserMap.containsKey(userId)) {
-                double otherWeight = otherUserMap.get(userId);
+            String pairKey = getPairKey(eventId, otherEventId);
 
-                double oldMin = Math.min(oldWeight, otherWeight);
-                double newMin = Math.min(newWeight, otherWeight);
-                double diff = newMin - oldMin;
-
-                if (diff != 0) {
-                    double currentSMin = minWeightsMatrix.get(updatedEventId, otherEventId);
-                    double updatedSMin = currentSMin + diff;
-                    minWeightsMatrix.put(updatedEventId, otherEventId, updatedSMin);
-
-                    log.debug("Updated S_min for pair ({}, {}): {} -> {}",
-                            updatedEventId, otherEventId, currentSMin, updatedSMin);
-                }
+            if (sentPairs.contains(pairKey)) {
+                log.debug("Pair {} already sent, skipping", pairKey);
+                continue;
             }
+
+            log.info("Processing pair: ({}, {})", eventId, otherEventId);
+
+            double similarity = calculateSimilarity(eventId, otherEventId);
+
+            sendSimilarityUpdate(eventId, otherEventId, similarity, timestamp);
+            sentPairs.add(pairKey);
+
         }
+
     }
 
-    private boolean hasCommonUsers(long eventA, long eventB) {
-        Map<Long, Double> usersA = weights.get(eventA);
-        Map<Long, Double> usersB = weights.get(eventB);
+    private double calculateSimilarity(long eventA, long eventB) {
 
-        if (usersA == null || usersB == null) {
-            return false;
-        }
-
-        return usersA.keySet().stream().anyMatch(usersB::containsKey);
-    }
-
-    private void updatePairSimilarity(long eventA, long eventB, Instant timestamp) {
         double sMin = minWeightsMatrix.get(eventA, eventB);
+        log.info("eventA : {}", eventA);
+        log.info("eventB : {}", eventB);
+        log.info("sMin : {}", sMin);
+        return calculateSimilarityWithSMin(eventA, eventB, sMin);
+    }
+
+    private double calculateSimilarityWithSMin(long eventA, long eventB, double sMin) {
         double sA = eventWeightsSum.getOrDefault(eventA, 0.0);
         double sB = eventWeightsSum.getOrDefault(eventB, 0.0);
 
+        log.info("Calculating similarity for ({}, {}): S_min={}, S_A={}, S_B={}",
+                eventA, eventB, sMin, sA, sB);
+
         if (sA == 0 || sB == 0) {
-            log.debug("Zero sum: (sA={}, sB={}) for events: {} and {}", sA, sB, eventA, eventB);
-            return;
+            log.info("One of event sums is zero, returning 0");
+            return 0.0;
         }
 
         double similarity = sMin / Math.sqrt(sA * sB);
 
+        log.info("Similarity calculated: {} / sqrt({} * {}) = {}", sMin, sA, sB, similarity);
+        return similarity;
+    }
+
+    private void sendSimilarityUpdate(long eventA, long eventB, double similarity, Instant timestamp) {
         long first = Math.min(eventA, eventB);
         long second = Math.max(eventA, eventB);
 
@@ -126,9 +166,20 @@ public class SimilarityService {
                 .setTimestamp(timestamp)
                 .build();
 
-        kafkaTemplate.send(props.getProducer().getTopic(), similarityMsg);
+        log.info("SENDING similarity message: eventA={}, eventB={}, score={}", first, second, similarity);
 
-        log.debug("Similarity updated for (A={}, B={}) => {}", first, second, similarity);
+        try {
+            kafkaTemplate.send(props.getProducer().getTopic(), similarityMsg);
+            log.info("Similarity SENT for (A={}, B={}) => {}", first, second, similarity);
+        } catch (Exception e) {
+            log.error("Failed to send similarity message for (A={}, B={}): {}", first, second, e.getMessage());
+        }
+    }
+
+    private String getPairKey(long eventA, long eventB) {
+        long first = Math.min(eventA, eventB);
+        long second = Math.max(eventA, eventB);
+        return first + "_" + second;
     }
 
     private double convertActionType(ActionTypeAvro actionType) {
