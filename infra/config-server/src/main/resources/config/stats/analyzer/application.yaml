@@ -31,8 +31,6 @@ kafka:
     value-deserializer: ru.yandex.practicum.AvroDeserializer
 
 grpc:
-  server:
-    enabled: false
   client:
     analyzer:
       address: 'discovery:///analyzer'
