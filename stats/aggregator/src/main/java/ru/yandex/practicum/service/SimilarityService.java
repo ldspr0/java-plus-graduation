@@ -63,6 +63,7 @@ public class SimilarityService {
 
         weights.keySet().stream()
                 .filter(otherEventId -> !otherEventId.equals(eventId))
+                .filter(otherEventId -> hasCommonUsers(eventId, otherEventId))
                 .forEach(otherEventId -> updatePairSimilarity(eventId, otherEventId, timestamp));
     }
 
@@ -90,6 +91,17 @@ public class SimilarityService {
                 }
             }
         }
+    }
+
+    private boolean hasCommonUsers(long eventA, long eventB) {
+        Map<Long, Double> usersA = weights.get(eventA);
+        Map<Long, Double> usersB = weights.get(eventB);
+
+        if (usersA == null || usersB == null) {
+            return false;
+        }
+
+        return usersA.keySet().stream().anyMatch(usersB::containsKey);
     }
 
     private void updatePairSimilarity(long eventA, long eventB, Instant timestamp) {
