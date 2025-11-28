@@ -16,13 +16,16 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table(name = "events_similarity")
+@IdClass(EventSimilarityId.class)
 public class EventSimilarity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
     private Long eventA;
+
+    @Id
     private Long eventB;
+
+
     private Double score;
     private Instant timestamp;
 }

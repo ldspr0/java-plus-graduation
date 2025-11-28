@@ -1,16 +1,13 @@
 package ru.yandex.practicum.analyzer.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -20,15 +17,23 @@ import java.time.Instant;
 @Builder
 @Entity
 @Table(name = "user_actions")
+@IdClass(UserActionId.class)
 public class UserAction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
+    @Column(name = "user_id")
     private Long userId;
+
+    @Id
+    @Column(name = "event_id")
     private Long eventId;
+
+    @Column(name = "action_type")
+    private String actionType;
 
     private Double maxWeight;
 
+    @Column(name = "timestamp")
     private Instant lastInteraction;
 }
+
