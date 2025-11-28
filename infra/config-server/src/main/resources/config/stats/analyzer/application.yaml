@@ -23,12 +23,12 @@ kafka:
     group-id: analyzer-user-actions
     topic: stats.user-actions.v1
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: ru.yandex.practicum.AvroDeserializer
+    value-deserializer: ru.yandex.practicum.UserActionAvroDeserializer
   events-similarity-consumer:
     group-id: analyzer-events-sim
     topic: stats.events-similarity.v1
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value-deserializer: ru.yandex.practicum.AvroDeserializer
+    value-deserializer: ru.yandex.practicum.EventSimilarityAvroDeserializer
 
 grpc:
   server:
