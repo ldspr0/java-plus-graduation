@@ -9,7 +9,3 @@ kafka:
     topic: stats.events-similarity.v1
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
     value-serializer: ru.yandex.practicum.AvroSerializer
-
-grpc:
-  server:
-    enabled: false

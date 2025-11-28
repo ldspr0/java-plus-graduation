@@ -2,7 +2,7 @@ package ru.yandex.practicum.analyzer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import stats.service.collector.Recommendations;
+import stats.service.dashboard.Recommendations;
 import ru.yandex.practicum.analyzer.entity.EventSimilarity;
 import ru.yandex.practicum.analyzer.entity.RecommendedEvent;
 import ru.yandex.practicum.analyzer.entity.UserAction;
