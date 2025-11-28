@@ -5,7 +5,6 @@ package stats.service.collector;
 import "google/protobuf/timestamp.proto";
 
 option java_multiple_files = true;
-option java_package = "stats.service.collector";
 
 enum ActionTypeProto {
   ACTION_VIEW = 0;
