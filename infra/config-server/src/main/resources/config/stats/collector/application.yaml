@@ -12,9 +12,3 @@ collector:
 grpc:
   server:
     port: 0
-  client:
-    analyzer:
-      address: 'discovery:///collector'
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true
-      negotiationType: plaintext

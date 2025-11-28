@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "kafka")
+@ConfigurationProperties(prefix = "spring.kafka")
 @Getter
 @Setter
 public class KafkaProperties {
@@ -19,15 +19,15 @@ public class KafkaProperties {
     public static class Consumer {
         private String groupId;
         private String topic;
-        private Class<?> keyDeserializer;
-        private Class<?> valueDeserializer;
+        private String keyDeserializer;
+        private String valueDeserializer;
     }
 
     @Getter
     @Setter
     public static class Producer {
         private String topic;
-        private Class<?> keySerializer;
-        private Class<?> valueSerializer;
+        private String keySerializer;
+        private String valueSerializer;
     }
 }

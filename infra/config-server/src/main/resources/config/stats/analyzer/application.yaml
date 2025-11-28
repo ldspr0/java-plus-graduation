@@ -31,9 +31,5 @@ kafka:
     value-deserializer: ru.yandex.practicum.AvroDeserializer
 
 grpc:
-  client:
-    analyzer:
-      address: 'discovery:///analyzer'
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true
-      negotiationType: plaintext
+  server:
+    port: 0
