@@ -3,7 +3,7 @@ package ru.yandex.practicum.collector.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import ru.yandex.practicum.collector.config.KafkaProperties;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 import org.springframework.stereotype.Component;
 
 @Component

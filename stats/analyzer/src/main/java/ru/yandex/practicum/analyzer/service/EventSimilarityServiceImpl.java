@@ -3,7 +3,7 @@ package ru.yandex.practicum.analyzer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.ewm.stats.avro.EventSimilarityAvro;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 import ru.yandex.practicum.analyzer.entity.EventSimilarity;
 import ru.yandex.practicum.analyzer.repository.EventSimilarityRepository;
 
@@ -20,7 +20,7 @@ public class EventSimilarityServiceImpl implements EventSimilarityService {
     public void updateEventSimilarity(EventSimilarityAvro eventSimilarityAvro) {
         long eventA = eventSimilarityAvro.getEventA();
         long eventB = eventSimilarityAvro.getEventB();
-        float score = eventSimilarityAvro.getScore();
+        double score = eventSimilarityAvro.getScore();
         Instant ts = eventSimilarityAvro.getTimestamp();
 
         EventSimilarity existing = findPair(eventA, eventB);

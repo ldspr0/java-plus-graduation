@@ -10,7 +10,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import stats.service.collector.UserActionControllerGrpc;
 import stats.service.collector.UserActionProto;
 import ru.yandex.practicum.collector.mapper.UserActionMapper;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 
 @Slf4j
 @GrpcService

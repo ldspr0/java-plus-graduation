@@ -5,9 +5,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.config.KafkaProperties;
 
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
-import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
-import ru.yandex.practicum.ewm.stats.avro.EventSimilarityAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.ActionTypeAvro;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -36,8 +36,13 @@ public class SimilarityService {
         long userId = action.getUserId();
         long eventId = action.getEventId();
         int newWeight = convertActionType(action.getActionType());
-        long timestampMillis = action.getTimestamp();
-        Instant timestamp = Instant.ofEpochMilli(timestampMillis);
+        Instant timestamp;
+        if (action.getTimestamp() != null) {
+            timestamp = action.getTimestamp();
+        } else {
+            throw new IllegalArgumentException("Unsupported timestamp type: " + action.getTimestamp().getClass());
+        }
+
 
         Map<Long, Integer> userMap = weights.computeIfAbsent(eventId, e -> new HashMap<>());
         int oldWeight = userMap.getOrDefault(userId, 0);

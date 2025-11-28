@@ -3,10 +3,10 @@ package ru.yandex.practicum.analyzer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 import ru.yandex.practicum.analyzer.entity.UserAction;
 import ru.yandex.practicum.analyzer.repository.UserActionRepository;
-import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
+import ru.practicum.ewm.stats.avro.ActionTypeAvro;
 
 import java.time.Instant;
 
@@ -22,9 +22,7 @@ public class UserActionServiceImpl implements UserActionService {
         long userId = userActionAvro.getUserId();
         long eventId = userActionAvro.getEventId();
         double newWeight = convertWeight(userActionAvro.getActionType());
-        long ts = userActionAvro.getTimestamp();
-
-        Instant interactionTime = Instant.ofEpochMilli(ts);
+        Instant ts = userActionAvro.getTimestamp();
 
         UserAction userAction = userActionRepository.findByUserIdAndEventId(userId, eventId);
         if (userAction == null) {
@@ -32,7 +30,7 @@ public class UserActionServiceImpl implements UserActionService {
             userAction.setUserId(userId);
             userAction.setEventId(eventId);
             userAction.setMaxWeight(newWeight);
-            userAction.setLastInteraction(interactionTime);
+            userAction.setLastInteraction(ts);
             userActionRepository.save(userAction);
             return;
         }
@@ -41,8 +39,8 @@ public class UserActionServiceImpl implements UserActionService {
             userAction.setMaxWeight(newWeight);
         }
 
-        if (interactionTime.isAfter(userAction.getLastInteraction())) {
-            userAction.setLastInteraction(interactionTime);
+        if (ts.isAfter(userAction.getLastInteraction())) {
+            userAction.setLastInteraction(ts);
         }
         userActionRepository.save(userAction);
     }

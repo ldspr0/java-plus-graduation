@@ -1,22 +1,26 @@
 package ru.yandex.practicum.collector.mapper;
 
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
-import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.ActionTypeAvro;
 import stats.service.collector.ActionTypeProto;
 import stats.service.collector.UserActionProto;
+
+import java.time.Instant;
 
 
 public class UserActionMapper {
 
     public static UserActionAvro toAvro(UserActionProto proto) {
-        long timestampMillis = proto.getTimestamp().getSeconds() * 1000
-                + proto.getTimestamp().getNanos() / 1_000_000;
+        Instant instant = Instant.ofEpochSecond(
+                proto.getTimestamp().getSeconds(),
+                proto.getTimestamp().getNanos()
+        );
 
         return UserActionAvro.newBuilder()
                 .setUserId(proto.getUserId())
                 .setEventId(proto.getEventId())
                 .setActionType(toAvroActionType(proto.getActionType()))
-                .setTimestamp(timestampMillis)
+                .setTimestamp(instant)
                 .build();
     }
 

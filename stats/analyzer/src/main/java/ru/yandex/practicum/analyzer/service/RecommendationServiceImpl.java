@@ -64,7 +64,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         Set<Long> interacted = userInteracted(userId);
 
-        Map<Long, Float> bestScoreMap = new HashMap<>();
+        Map<Long, Double> bestScoreMap = new HashMap<>();
         for (UserAction r : recent) {
             long ev = r.getEventId();
             List<EventSimilarity> simList = similarityRepo.findByEventAOrEventB(ev, ev);
@@ -73,7 +73,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 if (interacted.contains(other)) {
                     continue;
                 }
-                float oldVal = bestScoreMap.getOrDefault(other, 0f);
+                Double oldVal = bestScoreMap.getOrDefault(other, 0.0);
                 if (e.getScore() > oldVal) {
                     bestScoreMap.put(other, e.getScore());
                 }

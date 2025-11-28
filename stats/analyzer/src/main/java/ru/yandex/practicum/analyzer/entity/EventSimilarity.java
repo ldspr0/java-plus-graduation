@@ -23,6 +23,6 @@ public class EventSimilarity {
 
     private Long eventA;
     private Long eventB;
-    private Float score;
+    private Double score;
     private Instant timestamp;
 }
