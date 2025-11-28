@@ -7,8 +7,8 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import ru.yandex.practicum.ewm.stats.proto.UserActionControllerGrpc;
-import ru.yandex.practicum.ewm.stats.proto.UserActionProto;
+import stats.service.collector.UserActionControllerGrpc;
+import stats.service.collector.UserActionProto;
 import ru.yandex.practicum.collector.mapper.UserActionMapper;
 import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
 

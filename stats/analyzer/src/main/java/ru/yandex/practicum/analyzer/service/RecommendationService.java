@@ -1,7 +1,7 @@
 package ru.yandex.practicum.analyzer.service;
 
 import ru.yandex.practicum.analyzer.entity.RecommendedEvent;
-import ru.yandex.practicum.ewm.stats.proto.Recommendations;
+import stats.service.collector.Recommendations;
 
 import java.util.List;
 

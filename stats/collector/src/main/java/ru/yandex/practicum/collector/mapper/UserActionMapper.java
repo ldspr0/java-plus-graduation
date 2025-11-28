@@ -2,8 +2,8 @@ package ru.yandex.practicum.collector.mapper;
 
 import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
 import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
-import ru.yandex.practicum.ewm.stats.proto.ActionTypeProto;
-import ru.yandex.practicum.ewm.stats.proto.UserActionProto;
+import stats.service.collector.ActionTypeProto;
+import stats.service.collector.UserActionProto;
 
 
 public class UserActionMapper {

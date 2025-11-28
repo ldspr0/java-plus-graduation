@@ -3,8 +3,8 @@ package ru.yandex.practicum.stats.client;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.ewm.stats.proto.RecommendationsControllerGrpc;
-import ru.yandex.practicum.ewm.stats.proto.Recommendations;
+import stats.service.collector.RecommendationsControllerGrpc;
+import stats.service.collector.Recommendations;
 
 import java.util.Iterator;
 import java.util.Spliterator;
