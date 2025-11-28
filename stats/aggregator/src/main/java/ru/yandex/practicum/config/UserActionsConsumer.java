@@ -20,7 +20,11 @@ public class UserActionsConsumer {
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void consumeUserAction(UserActionAvro message) {
-        log.info("consumeUserAction Kafka: {}", message);
-        similarityService.processUserAction(message);
+        try {
+            log.info("consumeUserAction Kafka: {}", message);
+            similarityService.processUserAction(message);
+        } catch (Exception e) {
+            log.error("Error processing user action, skipping message: {}", message, e);
+        }
     }
 }

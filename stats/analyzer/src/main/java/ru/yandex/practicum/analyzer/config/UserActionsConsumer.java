@@ -19,7 +19,11 @@ public class UserActionsConsumer {
             containerFactory = "userActionsKafkaListenerFactory"
     )
     public void consumeUserActions(UserActionAvro message) {
-        log.info("user action: {}", message);
-        userActionService.updateUserAction(message);
+        try {
+            log.info("user action: {}", message);
+            userActionService.updateUserAction(message);
+        } catch (Exception e) {
+            log.error("Error processing user action in analyzer, skipping message: {}", message, e);
+        }
     }
 }

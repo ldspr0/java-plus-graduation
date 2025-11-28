@@ -19,7 +19,11 @@ public class EventsSimilarityConsumer {
             containerFactory = "eventSimilarityKafkaListenerFactory"
     )
     public void consumeEventSimilarity(EventSimilarityAvro msg) {
-        log.info("Get similarity: {}", msg);
-        eventSimilarityService.updateEventSimilarity(msg);
+        try {
+            log.info("Get similarity: {}", msg);
+            eventSimilarityService.updateEventSimilarity(msg);
+        } catch (Exception e) {
+            log.error("Error processing event similarity, skipping message: {}", msg, e);
+        }
     }
 }
