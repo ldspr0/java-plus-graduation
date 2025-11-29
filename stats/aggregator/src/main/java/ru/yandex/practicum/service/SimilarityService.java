@@ -95,22 +95,26 @@ public class SimilarityService {
     }
 
     private void recalculateAndSendSimilarities(long eventId, Instant timestamp, double oldWeight, long userId) {
+        log.info("recalculateAndSendSimilarities");
         Set<String> sentPairs = new HashSet<>();
 
         // Для каждой пары пересчитываем S_min и similarity
         for (Long otherEventId : weights.keySet()) {
-            if (otherEventId == eventId) {
-                continue;
-            }
+
             if (weights.get(otherEventId).get(userId) == null || weights.get(otherEventId).get(userId) == 0.0) {
+                log.info("weigh : {} ",weights.get(otherEventId).get(userId));
+                log.info("lol");
                 continue;
             }
             double otherEventWeight = weights.get(otherEventId).get(userId);
+            log.info("otherEventWeigh: {}", otherEventWeight);
             if (otherEventWeight <= oldWeight) {
+                log.info("oldweight: {}", oldWeight);
                 continue;
             }
 
             String pairKey = getPairKey(eventId, otherEventId);
+            log.info("pairKey: {}", pairKey);
 
             if (sentPairs.contains(pairKey)) {
                 log.debug("Pair {} already sent, skipping", pairKey);
