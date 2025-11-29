@@ -23,8 +23,7 @@ import ru.yandex.practicum.core_api.model.event.PublicEventParam;
 import ru.yandex.practicum.event_service.repository.CategoryRepository;
 import ru.yandex.practicum.event_service.repository.EventRepository;
 import ru.yandex.practicum.core_api.util.ExistenceValidator;
-import ru.yandex.practicum.core_api.util.StatsGetter;
-import ru.yandex.practicum.stats.dto.ViewStats;
+//import ru.yandex.practicum.stats.client.AnalyzerClient;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -42,7 +41,8 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
-    private final StatsGetter statsGetter;
+    //private final AnalyzerClient analyzerClient;
+    //private final CollectorClient collectorClient;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
@@ -57,7 +57,6 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         event.setState(EventState.PENDING);
         Event eventSaved = eventRepository.save(event);
         EventFullDto eventFullDto = eventMapper.toFullDto(eventSaved);
-        eventFullDto.setViews(0L);
 
         log.info("{}: result of createEvent(): {}", className, eventFullDto);
         return eventFullDto;
@@ -155,17 +154,23 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
     @Override
     @Transactional(readOnly = true)
-    public EventFullDto getPublicEventById(long eventId) {
+    public EventFullDto getPublicEventById(long eventId, long userId) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> {
                     log.info("{}: attempt to find event with id: {}", className, eventId);
                     return new NotFoundException("The required object was not found.",
                             "Event with id=" + eventId + " was not found");
                 });
+
+        //collectorClient.sendViewEvent(userId, eventId);
+
         List<Event> events = List.of(event);
         LocalDateTime startStats = event.getCreatedOn().truncatedTo(ChronoUnit.SECONDS);
         LocalDateTime endStats = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         EventStatistics stats = getEventStatistics(events, startStats, endStats);
+
+        //Double rating = analyzerClient.getEventRating(eventId);
+
         EventFullDto result = eventMapper.toFullDtoWithStats(event, stats);
         log.info("{}: result of getPublicEventById(): {}", className, result);
         return result;
@@ -222,8 +227,15 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         LocalDateTime endStats = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
         EventStatistics stats = getEventStatistics(events, startStats, endStats);
+
+        List<Long> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
+        Map<Long, Double> ratings = new HashMap<>();//analyzerClient.getEventsRatings(eventIds);
+
         List<EventShortDto> result = events.stream()
-                .map(event -> eventMapper.toShortDtoWithStats(event, stats))
+                .map(event -> {
+                    Double rating = ratings.getOrDefault(event.getId(), 0.0);
+                    return eventMapper.toShortDtoWithStatsAndRating(event, stats, rating);
+                })
                 .toList();
         log.info("{}: result of getPublicEvents(): {}", className, result);
         return result;
@@ -232,18 +244,19 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
     @Override
     public Map<Long, Long> getEventViews(EventViewsParameters params) {
-        List<ViewStats> stats = statsGetter.getEventViewStats(params);
-        Map<Long, Long> views = new HashMap<>();
-        if (stats != null) {
-            for (ViewStats stat : stats) {
-                Long eventId = extractId(stat.getUri());
-                if (eventId != null) {
-                    views.put(eventId, stat.getHits());
-                }
-            }
-        }
-        log.info("{}: result of getEventViews: {}", className, views);
-        return views;
+//        List<ViewStats> stats = statsGetter.getEventViewStats(params);
+//        Map<Long, Long> views = new HashMap<>();
+//        if (stats != null) {
+//            for (ViewStats stat : stats) {
+//                Long eventId = extractId(stat.getUri());
+//                if (eventId != null) {
+//                    views.put(eventId, stat.getHits());
+//                }
+//            }
+//        }
+//        log.info("{}: result of getEventViews: {}", className, views);
+//        return views;
+        return new HashMap<>();
     }
 
 

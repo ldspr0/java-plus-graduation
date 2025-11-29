@@ -64,7 +64,7 @@ public interface EventInterface {
 
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);
+    EventFullDto getEventById(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId, @RequestHeader("X-EWM-USER-ID") long userId);
 
     @GetMapping("/events/{eventId}/internal")
     EventFullDto getEventByIdInternal(@PathVariable("eventId") @PositiveOrZero @NotNull Long eventId);

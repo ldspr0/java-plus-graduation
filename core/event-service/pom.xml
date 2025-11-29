@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>ru.yandex.practicum</groupId>
-            <artifactId>stats-client</artifactId>
+            <artifactId>aggregator</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -82,13 +82,13 @@
         </dependency>
         <dependency>
             <groupId>ru.yandex.practicum</groupId>
-            <artifactId>stats-dto</artifactId>
+            <artifactId>core-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.yandex.practicum</groupId>
-            <artifactId>core-api</artifactId>
+            <artifactId>stats-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

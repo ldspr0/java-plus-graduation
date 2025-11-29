@@ -8,7 +8,6 @@ import ru.yandex.practicum.core_api.model.event.dto.EventShortDto;
 import ru.yandex.practicum.core_api.model.event.dto.EventViewsParameters;
 import ru.yandex.practicum.core_api.model.event.dto.NewEventDto;
 import ru.yandex.practicum.core_api.model.event.dto.UpdateEventUserRequest;
-import ru.yandex.practicum.core_api.model.request.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +20,7 @@ public interface EventService {
 
     EventFullDto updateEvent(long userId, long eventId, UpdateEventUserRequest updateEvent);
 
-    EventFullDto getPublicEventById(long eventId);
+    EventFullDto getPublicEventById(long eventId, long userId);
 
     EventFullDto getEventByIdInternal(long eventId);
 

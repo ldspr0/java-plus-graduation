@@ -20,7 +20,5 @@ spring:
     username: main
     password: main
 
-stats:
-  server-url: http://localhost:9090
 
 app: explore-with-me-event-service

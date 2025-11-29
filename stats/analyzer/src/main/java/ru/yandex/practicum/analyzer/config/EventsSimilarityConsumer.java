@@ -1,0 +1,29 @@
+package ru.yandex.practicum.analyzer.config;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
+import ru.yandex.practicum.analyzer.service.EventSimilarityService;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class EventsSimilarityConsumer {
+
+    private final EventSimilarityService eventSimilarityService;
+
+    @KafkaListener(
+            topics = "${kafka.events-similarity-consumer.topic}",
+            containerFactory = "eventSimilarityKafkaListenerFactory"
+    )
+    public void consumeEventSimilarity(EventSimilarityAvro msg) {
+        try {
+            log.info("Get similarity: {}", msg);
+            eventSimilarityService.updateEventSimilarity(msg);
+        } catch (Exception e) {
+            log.error("Error processing event similarity, skipping message: {}", msg, e);
+        }
+    }
+}

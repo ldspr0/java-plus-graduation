@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.service.dashboard;
+
+import "messages/recommendations.proto";
+
+service RecommendationsController {
+  rpc GetRecommendationsForUser(UserPredictionsRequestProto)
+      returns (stream RecommendedEventProto);
+
+  rpc GetSimilarEvents(SimilarEventsRequestProto)
+      returns (stream RecommendedEventProto);
+
+  rpc GetInteractionsCount(InteractionsCountRequestProto)
+      returns (stream RecommendedEventProto);
+}

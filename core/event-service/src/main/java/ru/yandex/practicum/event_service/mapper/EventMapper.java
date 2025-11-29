@@ -14,14 +14,15 @@ import ru.yandex.practicum.event_service.model.Event;
 
 @Mapper(componentModel = "spring", uses = {CategoryMapper.class, CommentMapper.class})
 public interface EventMapper {
+
     @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true) // Игнорировать rating в базовом методе
     EventFullDto toFullDto(Event event);
 
     @Mapping(target = "initiator", source = "initiatorId")
     @Mapping(target = "confirmedRequests", ignore = true)
-    @Mapping(target = "views", ignore = true)
+    @Mapping(target = "rating", ignore = true) // Игнорировать rating в базовом методе
     EventShortDto toShortDto(Event event);
 
     @Mapping(target = "id", ignore = true)
@@ -41,17 +42,42 @@ public interface EventMapper {
     @Mapping(target = "category", ignore = true)
     void updateFromAdmin(UpdateEventAdminRequestDto dto, @MappingTarget Event event);
 
+    // Оригинальные методы (оставить для обратной совместимости)
     default EventFullDto toFullDtoWithStats(Event event, EventStatistics stats) {
         EventFullDto dto = toFullDto(event);
-        dto.setViews(stats.getViews(event.getId()));
         dto.setConfirmedRequests(stats.getConfirmedRequests(event.getId()));
         return dto;
     }
 
     default EventShortDto toShortDtoWithStats(Event event, EventStatistics stats) {
         EventShortDto dto = toShortDto(event);
-        dto.setViews(stats.getViews(event.getId()));
         dto.setConfirmedRequests(stats.getConfirmedRequests(event.getId()));
+        return dto;
+    }
+
+    // НОВЫЕ методы с рейтингом
+    default EventFullDto toFullDtoWithStatsAndRating(Event event, EventStatistics stats, Double rating) {
+        EventFullDto dto = toFullDtoWithStats(event, stats);
+        dto.setRating(rating); // Устанавливаем рейтинг
+        return dto;
+    }
+
+    default EventShortDto toShortDtoWithStatsAndRating(Event event, EventStatistics stats, Double rating) {
+        EventShortDto dto = toShortDtoWithStats(event, stats);
+        dto.setRating(rating); // Устанавливаем рейтинг
+        return dto;
+    }
+
+    // Дополнительные методы если нужно разделить логику
+    default EventFullDto toFullDtoWithRating(Event event, Double rating) {
+        EventFullDto dto = toFullDto(event);
+        dto.setRating(rating);
+        return dto;
+    }
+
+    default EventShortDto toShortDtoWithRating(Event event, Double rating) {
+        EventShortDto dto = toShortDto(event);
+        dto.setRating(rating);
         return dto;
     }
 }
