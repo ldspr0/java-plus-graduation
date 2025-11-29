@@ -108,7 +108,6 @@ public class EventController implements EventInterface {
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size,
                                          HttpServletRequest request) {
-        //statSaver.save(request, className);
 
         PublicEventParam publicEventParam = new PublicEventParam();
         publicEventParam.setText(Objects.requireNonNullElse(text, ""));
@@ -128,10 +127,10 @@ public class EventController implements EventInterface {
     @Override
     @GetMapping("/events/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId) {
-        //statSaver.save(request, className);
+    public EventFullDto getEventById(@PathVariable @PositiveOrZero @NotNull Long eventId,
+                                     @RequestHeader("X-EWM-USER-ID") long userId) {
         log.trace("{}: getEventByIdForUser() call with eventId: {}", className, eventId);
-        return eventsService.getPublicEventById(eventId);
+        return eventsService.getPublicEventById(eventId, userId);
     }
 
     @Override

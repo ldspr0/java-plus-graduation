@@ -47,17 +47,13 @@ public class SimilarityService {
         }
         log.info("OLD WEIGHT: {}, NEW WEIGHT: {}", oldWeight, newWeight);
 
-        log.info("PROCEEDING WITH CALCULATION...");
-
-        // Обновляем вес пользователя
         userMap.put(userId, newWeight);
 
-        // Обновляем сумму весов мероприятия
         updateEventWeightSum(eventId, oldWeight, newWeight);
 
         updateMinWeightMatrix(eventId, userId, oldWeight, newWeight);
 
-        // Пересчитываем и отправляем обновления только для нужных пар
+        log.info("PROCEEDING WITH CALCULATION...");
         recalculateAndSendSimilarities(eventId, timestamp, oldWeight, userId);
 
 
@@ -75,11 +71,8 @@ public class SimilarityService {
             if (otherEventWeight <= oldWeight) {
                 continue;
             }
-            log.info("otherEventWeight event: {} ", otherEventWeight);
             double oldMin = minWeightsMatrix.get(eventId, eachEvent);
-            log.info("oldMin event: {} ", oldMin);
             double diff = Math.min(otherEventWeight, newWeight) - oldWeight;
-            log.info("diff event: {} ", diff);
             minWeightsMatrix.put(eventId, eachEvent, oldMin + diff);
 
         }
@@ -95,22 +88,17 @@ public class SimilarityService {
     }
 
     private void recalculateAndSendSimilarities(long eventId, Instant timestamp, double oldWeight, long userId) {
-        log.info("recalculateAndSendSimilarities");
         Set<String> sentPairs = new HashSet<>();
 
-        // Для каждой пары пересчитываем S_min и similarity
         for (Long otherEventId : weights.keySet()) {
             log.info("otherEventId: {}", otherEventId);
             if (otherEventId == eventId) {
                 continue;
             }
             if (weights.get(otherEventId).get(userId) == null || weights.get(otherEventId).get(userId) == 0.0) {
-                log.info("weigh : {} ",weights.get(otherEventId).get(userId));
-                log.info("lol");
                 continue;
             }
             String pairKey = getPairKey(eventId, otherEventId);
-            log.info("pairKey: {}", pairKey);
 
             if (sentPairs.contains(pairKey)) {
                 log.debug("Pair {} already sent, skipping", pairKey);
@@ -131,9 +119,6 @@ public class SimilarityService {
     private double calculateSimilarity(long eventA, long eventB) {
 
         double sMin = minWeightsMatrix.get(eventA, eventB);
-        log.info("eventA : {}", eventA);
-        log.info("eventB : {}", eventB);
-        log.info("sMin : {}", sMin);
         return calculateSimilarityWithSMin(eventA, eventB, sMin);
     }
 

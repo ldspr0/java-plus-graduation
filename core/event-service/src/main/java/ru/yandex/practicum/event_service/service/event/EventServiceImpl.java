@@ -42,6 +42,7 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     //private final AnalyzerClient analyzerClient;
+    //private final CollectorClient collectorClient;
     private final RequestServiceClient requestServiceClient;
 
     @Transactional
@@ -153,17 +154,23 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
 
     @Override
     @Transactional(readOnly = true)
-    public EventFullDto getPublicEventById(long eventId) {
+    public EventFullDto getPublicEventById(long eventId, long userId) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> {
                     log.info("{}: attempt to find event with id: {}", className, eventId);
                     return new NotFoundException("The required object was not found.",
                             "Event with id=" + eventId + " was not found");
                 });
+
+        //collectorClient.sendViewEvent(userId, eventId);
+
         List<Event> events = List.of(event);
         LocalDateTime startStats = event.getCreatedOn().truncatedTo(ChronoUnit.SECONDS);
         LocalDateTime endStats = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         EventStatistics stats = getEventStatistics(events, startStats, endStats);
+
+        //Double rating = analyzerClient.getEventRating(eventId);
+
         EventFullDto result = eventMapper.toFullDtoWithStats(event, stats);
         log.info("{}: result of getPublicEventById(): {}", className, result);
         return result;
@@ -220,8 +227,15 @@ public class EventServiceImpl implements ExistenceValidator<Event>, EventService
         LocalDateTime endStats = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
         EventStatistics stats = getEventStatistics(events, startStats, endStats);
+
+        List<Long> eventIds = events.stream().map(Event::getId).collect(Collectors.toList());
+        Map<Long, Double> ratings = new HashMap<>();//analyzerClient.getEventsRatings(eventIds);
+
         List<EventShortDto> result = events.stream()
-                .map(event -> eventMapper.toShortDtoWithStats(event, stats))
+                .map(event -> {
+                    Double rating = ratings.getOrDefault(event.getId(), 0.0);
+                    return eventMapper.toShortDtoWithStatsAndRating(event, stats, rating);
+                })
                 .toList();
         log.info("{}: result of getPublicEvents(): {}", className, result);
         return result;
